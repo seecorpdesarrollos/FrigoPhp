@@ -17,14 +17,29 @@
 
         }
 
-      public function getInventarioTropaController(){
+
+      public function getVendedoresInactivosController(){
+        
+      $respuesta = VendedorModel::getVendedoresInactivosModel('vendedores');
+
+       if ($respuesta) {
+        
+          echo json_encode($respuesta);
+       
+       }
+
+        }
+
+ 
+
+      public function getVendedoresControllerId(){
               $data = file_get_contents("php://input");
              $request = json_decode($data);
              $request = (array) $request;
                 
             
-              $nroTropa =$request['nroTropa'];
-         $respuesta = InventarioModel::getInventarioTropaModel($nroTropa, 'inventario');
+              $idVendedor =$request['idVendedor'];
+         $respuesta = VendedorModel::getVendedorIdModel($idVendedor, 'vendedores');
 
          if ($respuesta) {
           
@@ -92,7 +107,7 @@
 
    	   }
 
-         public function  editarInventarioController(){
+         public function  editarVendedorController(){
              
 
               $data = file_get_contents("php://input");
@@ -100,63 +115,32 @@
              $request = (array) $request;
                 
             
-              $kiloMedia =$request['kiloMedia'];
-              $nroTropa =$request['nroTropa'];
-              $idInventario =$request['idInventario'];
-          $respuesta = InventarioModel::editarInventarioModel($kiloMedia, $nroTropa,$idInventario, 'inventario' );
+              $nombreVendedor =$request['nombreVendedor'];
+              $telefonoVendedor =$request['telefonoVendedor'];
+              $idVendedor =$request['idVendedor'];
+          $respuesta = VendedorModel::editarVendedorModel($nombreVendedor, $telefonoVendedor,$idVendedor,
+           'vendedores' );
 
                if ($respuesta == 'success') {
         
           echo json_encode($respuesta);
        
        }else{
-        echo json_encode("no hay edicion de  Inventario");
+        echo json_encode("no hay edicion de  Vendedor");
        }
 
        }
 
 
-        public function  editarProductosController(){
-             
-            $data = file_get_contents("php://input");
-            $request = json_decode($data);
-            $request = (array) $request;
-                
-              $dueHacienda =$request['dueHacienda'];
-              $cantCabeza =$request['cantCabeza'];
-              $cantMedia =$request['cantMedia'];
-              $fechaFaena =$request['fechaFaena'];
-              $cantKilos =$request['cantKilos'];
-              $nroTropa =$request['nroTropa'];
-              $idProductos =$request['idProductos'];
-          $respuesta = AgregarProductosModel::editarProductosModel(
-        $dueHacienda,
-        $cantCabeza,
-        $cantMedia,
-        $fechaFaena,
-        $cantKilos,
-        $nroTropa,
-        $idProductos,
-         'productos' );
-
-               if ($respuesta == 'success') {
-        
-          echo json_encode($respuesta);
-       
-       }else{
-        echo json_encode("no hay edición");
-       }
-
-       }
   
-        public function deleteProductosController(){
+        public function bajaVendedorController(){
        	  $data = file_get_contents("php://input");
     		  $request = json_decode($data);
     		  $request = (array) $request;
 
-    		  $idProductos =$request['idProductos'];
+    		  $idVendedor =$request['idVendedor'];
  			
- 			     $respuesta = AgregarProductosModel::deleteProductosModel($idProductos, 'productos' );
+ 			     $respuesta = VendedorModel::bajaVendedorModel($idVendedor, 'vendedores' );
 
          			 if ($respuesta == 'success') {
          			 	
@@ -167,16 +151,34 @@
          			 }
         }
 
-
-       public function comprobarInventarioController(){
+        public function altaVendedorController(){
           $data = file_get_contents("php://input");
           $request = json_decode($data);
           $request = (array) $request;
 
-          // $nroTropaComprobar =4563200;
-          $nroTropaComprobar =$request['nroTropaComprobar'];
+          $idVendedor =$request['idVendedor'];
       
-           $respuesta = InventarioModel::comprobarInventarioModel($nroTropaComprobar, 'inventario' );
+           $respuesta = VendedorModel::altaVendedorModel($idVendedor, 'vendedores' );
+
+               if ($respuesta == 'success') {
+                
+                  echo json_encode($respuesta);
+               
+               }else{
+                echo json_encode($respuesta);
+               }
+        }
+
+
+       public function comprobarVendedorController(){
+          $data = file_get_contents("php://input");
+          $request = json_decode($data);
+          $request = (array) $request;
+
+          // $nombreVendedor ='juan valdes';
+          $nombreVendedor =$request['nombreVendedor'];
+      
+           $respuesta = VendedorModel::comprobarVendedorModel($nombreVendedor, 'vendedores' );
 
                if ($respuesta == 'success') {
                 
@@ -202,6 +204,46 @@
       if ($_GET['id'] == "geVen") {
          $usuario = new VendedoresController;
          $usuario->getVendedoresController();
+      }
+   }
+
+           if(isset($_GET['id'])){
+      if ($_GET['id'] == "geVenInactivo") {
+         $usuario = new VendedoresController;
+         $usuario->getVendedoresInactivosController();
+      }
+   }
+     if(isset($_GET['id'])){
+      if ($_GET['id'] == "geVenId") {
+         $usuario = new VendedoresController;
+         $usuario->getVendedoresControllerId();
+      }
+   }
+        if(isset($_GET['id'])){
+      if ($_GET['id'] == "comprobarVen") {
+         $usuario = new VendedoresController;
+         $usuario->comprobarVendedorController();
+      }
+   }
+
+          if(isset($_GET['id'])){
+      if ($_GET['id'] == "editarVendedor") {
+         $usuario = new VendedoresController;
+         $usuario->editarVendedorController();
+      }
+   }
+
+           if(isset($_GET['id'])){
+      if ($_GET['id'] == "bajaVenId") {
+         $usuario = new VendedoresController;
+         $usuario->bajaVendedorController();
+      }
+   }
+
+           if(isset($_GET['id'])){
+      if ($_GET['id'] == "altaVenId") {
+         $usuario = new VendedoresController;
+         $usuario->altaVendedorController();
       }
    }
      

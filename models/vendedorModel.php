@@ -6,7 +6,6 @@
 
   	     public function getVendedoresModel($table){
 
-
    	   	    $sql = Conexion::conectar()->prepare("SELECT * FROM $table WHERE estado = 1  ORDER BY idVendedor ASC");
 
    	   	    if ($sql->execute()) {
@@ -17,6 +16,18 @@
    	   	    }
             $sql->close();
    	   }
+               public function getVendedoresInactivosModel($table){
+
+            $sql = Conexion::conectar()->prepare("SELECT * FROM $table WHERE estado = 0  ORDER BY idVendedor ASC");
+
+            if ($sql->execute()) {
+               return $sql->fetchAll();
+
+            }else{
+              return 'error';
+            }
+            $sql->close();
+       }
 
 
          public function getInventarioTotalModel($nroTropa , $table){
@@ -33,15 +44,14 @@
             $sql->close();
        }
 
-          public function getInventarioTropaModel($nroTropa, $table){
+          public function getVendedorIdModel($idVendedor, $table){
 
 
-            $sql = Conexion::conectar()->prepare("SELECT *   FROM $table ta 
-              JOIN productos pro ON ta.nroTropa = pro.nroTropa
-              WHERE pro.nroTropa=:nroTropa");
+            $sql = Conexion::conectar()->prepare("SELECT * FROM $table 
+              WHERE idVendedor=:idVendedor");
 
-            if ($sql->execute( array(':nroTropa'=>$nroTropa))) {
-               return $sql->fetchAll();
+            if ($sql->execute( array(':idVendedor'=>$idVendedor))) {
+               return $sql->fetch();
 
             }else{
               return 'error';
@@ -66,11 +76,23 @@
        }
 
 
-         public static function deleteProductosModel($datosModel, $tabla)
+         public static function bajaVendedorModel($datosModel, $tabla)
     {
 
-        $sql = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE idProductos = :idProductos");
-        $sql->bindParam(':idProductos', $datosModel);
+        $sql = Conexion::conectar()->prepare("UPDATE $tabla SET estado = 0  WHERE idVendedor = :idVendedor");
+        $sql->bindParam(':idVendedor', $datosModel);
+
+        if ($sql->execute()) {
+            return 'success';
+        }
+        $sql->close();
+    }
+
+             public static function altaVendedorModel($datosModel, $tabla)
+    {
+
+        $sql = Conexion::conectar()->prepare("UPDATE $tabla SET estado = 1  WHERE idVendedor = :idVendedor");
+        $sql->bindParam(':idVendedor', $datosModel);
 
         if ($sql->execute()) {
             return 'success';
@@ -111,14 +133,14 @@
 
          }
 
-          public function editarInventarioModel($kiloMedia,$nroTropa, $idInventario, $tabla){
+          public function editarVendedorModel($nombreVendedor,$telefonoVendedor, $idVendedor, $tabla){
 
                $sql = Conexion::conectar()->prepare("UPDATE  $tabla SET 
-                kiloMedia = :kiloMedia , nroTropa= :nroTropa WHERE idInventario=:idInventario");
+                nombreVendedor = :nombreVendedor , telefonoVendedor= :telefonoVendedor WHERE idVendedor=:idVendedor");
 
-              $sql->bindParam(':kiloMedia', $kiloMedia);
-              $sql->bindParam(':nroTropa', $nroTropa);
-              $sql->bindParam(':idInventario', $idInventario);
+              $sql->bindParam(':nombreVendedor', $nombreVendedor);
+              $sql->bindParam(':telefonoVendedor', $telefonoVendedor);
+              $sql->bindParam(':idVendedor', $idVendedor);
 
               if ($sql->execute()) {
                 return 'success';
@@ -127,12 +149,11 @@
 
          }
 
-       public function comprobarInventarioModel($datosModel , $table){
+      public function comprobarVendedorModel($nombreVendedor , $table){
 
-
-            $sql = Conexion::conectar()->prepare("SELECT * FROM $table 
-              WHERE nroTropa = :datosModel");
-            $sql->execute(array(':datosModel'=>$datosModel));
+  $sql = Conexion::conectar()->prepare("SELECT * FROM $table 
+              WHERE nombreVendedor = :nombreVendedor");
+            $sql->execute(array(':nombreVendedor'=>$nombreVendedor));
             $res = $sql->fetchAll();
             if ( $res ) {
                return 'success';
@@ -143,31 +164,5 @@
             $sql->close();
        }
 
-        public function editarProductosModel($dueHacienda,
-                                             $cantCabeza,
-                                             $cantMedia,
-                                             $fechaFaena,
-                                             $cantKilos,
-                                             $nroTropa,
-                                             $idProductos
-                                              , $tabla){
-
-               $sql = Conexion::conectar()->prepare("UPDATE  $tabla SET 
-dueHacienda = :dueHacienda,  cantCabeza = :cantCabeza,cantMedia =:cantMedia,fechaFaena=:fechaFaena,cantKilos =:cantKilos,nroTropa=:nroTropa WHERE idProductos=:idProductos ");
-
-              $sql->bindParam(':dueHacienda', $dueHacienda);
-              $sql->bindParam(':cantCabeza', $cantCabeza);
-              $sql->bindParam(':cantMedia', $cantMedia);
-              $sql->bindParam(':fechaFaena', $fechaFaena);
-              $sql->bindParam(':cantKilos', $cantKilos);
-              $sql->bindParam(':nroTropa', $nroTropa);
-              $sql->bindParam(':idProductos', $idProductos);
-
-              if ($sql->execute()) {
-                return 'success';
-              }
-
-
-  }
-
+      
 }
