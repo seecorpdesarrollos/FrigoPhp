@@ -45,6 +45,25 @@
 			       }
      }
 
+       public function getTropaController(){
+       $data = file_get_contents("php://input");
+             $request = json_decode($data);
+             $request = (array) $request;
+                
+            
+              $nroTropa =$request['nroTropa'];
+         
+                // $nroTropa =45605;
+              
+            $respuesta = ReportesModel::getTropaModel($nroTropa,'detalles');
+
+             if ($respuesta) {
+              
+                echo json_encode($respuesta);
+             
+             }
+     }
+
 
 
    }
@@ -54,6 +73,14 @@
       if ($_GET['id'] == "mediasVendidas") {
         $delete = new ReportesController;
         $delete->getMediasController();  
+      }
+   }
+
+
+    if(isset($_GET['id'])){
+      if ($_GET['id'] == "getTropa") {
+        $delete = new ReportesController;
+        $delete->getTropaController();  
       }
    }
 

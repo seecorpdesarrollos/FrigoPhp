@@ -279,10 +279,11 @@
             
             
               $medias =$request['medias'];
+              $nroTropa =$request['nroTropa'];
               $precio =$request['precio'];
               $idInventario =$request['idInventario'];
               $facturaNro =1;
-          $respuesta = InventarioModel::temporal1Model($medias,$precio,
+          $respuesta = InventarioModel::temporal1Model($medias, $nroTropa,$precio,
            $facturaNro, $idInventario,'tempmedia' );
 
                if ($respuesta == 'success') {
@@ -549,7 +550,7 @@
           // $nroTropaComprobar =4563200;
           $nroTropaComprobar =$request['nroTropaComprobar'];
       
-           $respuesta = InventarioModel::comprobarInventarioModel($nroTropaComprobar, 'inventario' );
+           $respuesta = InventarioModel::comprobarInventarioModel($nroTropaComprobar, 'productos' );
 
                if ($respuesta == 'success') {
                 

@@ -16,6 +16,19 @@
    	   	    }
             $sql->close();
    	   }
+
+       public function getClientesTodosModel($table){
+
+            $sql = Conexion::conectar()->prepare("SELECT * FROM $table   ORDER BY idCliente ASC");
+
+            if ($sql->execute()) {
+               return $sql->fetchAll();
+
+            }else{
+              return 'error';
+            }
+            $sql->close();
+       }
                public function getClientesInactivosModel($table){
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table WHERE estadoCliente = 0  ORDER BY idCliente ASC");
@@ -153,6 +166,23 @@
 
 
          }
+
+
+         public function getClienteIdModel($idCliente, $table){
+
+            $sql = Conexion::conectar()->prepare("SELECT * FROM $table WHERE idCliente = :idCliente");
+
+            if ($sql->execute(array(':idCliente'=>$idCliente))) {
+               return $sql->fetch();
+
+            }else{
+              return 'error';
+            }
+            $sql->close();
+       }
+
+
+
 
           public function editarClientesModel($nombreCliente,$telefonoCliente,$direccionCliente ,
             $idCliente, $tabla){

@@ -260,8 +260,8 @@
 
 
 
-            $sql3 = Conexion::conectar()->prepare("INSERT INTO detalles(kilo,descripcion,cantidad,precio,fecha,nroFactura,idInventario,idCliente)
-  SELECT temm.kilo,temm.descripcionMedia,temm.cantidad,temm.precio,temm.fecha,temm.nroFactura,temm.idInventario,temm.idCliente FROM tempmedia temm");
+            $sql3 = Conexion::conectar()->prepare("INSERT INTO detalles(kilo,nroTropa, descripcion,cantidad,precio,fecha,nroFactura,idInventario,idCliente)
+  SELECT temm.kilo,temm.nroTropa,temm.descripcionMedia,temm.cantidad,temm.precio,temm.fecha,temm.nroFactura,temm.idInventario,temm.idCliente FROM tempmedia temm");
           $sql3->execute();
 
 
@@ -437,14 +437,15 @@
             }
 
 
-   public function temporal1Model($medias,
+   public function temporal1Model($medias,$nroTropa,
            $precio, $facturaNro, $idInventario, $tabla){
 
                $sql = Conexion::conectar()->prepare("INSERT INTO $tabla
-                (kilo,precio,nroFactura,idInventario)
-                           VALUES(:kiloMedia,:precioMedia,:nroFactura,:idInventario)");
+                (kilo,nroTropa,precio,nroFactura,idInventario)
+                           VALUES(:kiloMedia,:nroTropa,:precioMedia,:nroFactura,:idInventario)");
 
               $sql->bindParam(':kiloMedia', $medias);
+              $sql->bindParam(':nroTropa', $nroTropa);
               $sql->bindParam(':precioMedia', $precio);
               $sql->bindParam(':nroFactura', $facturaNro);
               $sql->bindParam(':idInventario', $idInventario);
@@ -588,7 +589,7 @@
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table 
               WHERE nroTropa = :datosModel");
             $sql->execute(array(':datosModel'=>$datosModel));
-            $res = $sql->fetchAll();
+            $res = $sql->fetch();
             if ( $res ) {
                return 'success';
 

@@ -38,4 +38,20 @@
             $sql->close();
    	   }
 
+    public function getTropaModel($nroTropa,  $table){
+
+            $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
+              JOIN clientes cli ON cli.idCliente= ta.idCliente
+              JOIN productos pro ON pro.nroTropa= ta.nroTropa
+             WHERE ta.nroTropa=:nroTropa
+              ");
+
+            if ($sql->execute(array( ':nroTropa'=>$nroTropa  ))) {
+              return $sql->fetchAll();
+            }else{
+              return 'error';
+            }
+            $sql->close();
+       }
+
 }

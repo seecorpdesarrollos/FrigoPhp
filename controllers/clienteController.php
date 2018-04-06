@@ -17,6 +17,18 @@
 
         }
 
+          public function getClientesTodosController(){
+        
+      $respuesta = ClientesModel::getClientesTodosModel('clientes');
+
+       if ($respuesta) {
+        
+          echo json_encode($respuesta);
+       
+       }
+
+        }
+
 
       public function getClientesInactivosController(){
         
@@ -241,6 +253,13 @@
       if ($_GET['id'] == "getCli") {
          $usuario = new ClientesController;
          $usuario->getClientesController();
+      }
+   }
+
+     if(isset($_GET['id'])){
+      if ($_GET['id'] == "getCliTodos") {
+         $usuario = new ClientesController;
+         $usuario->getClientesTodosController();
       }
    }
 
