@@ -1,5 +1,5 @@
 <?php 
-
+date_default_timezone_set('America/Argentina/Buenos_Aires');
     class Conexion{
 
     	public static function conectar(){

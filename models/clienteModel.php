@@ -44,18 +44,36 @@
             $sql->close();
        }
 
-          public function getClienteIdModel($idCliente, $table){
+          public function getClienteFacturadoIdModel($idCliente, $table){
 
 
-            $sql = Conexion::conectar()->prepare("SELECT * FROM $table 
-              WHERE idCliente=:idCliente");
+            $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta
+              JOIN facturado fa ON fa.idCliente=ta.idCliente
+              WHERE fa.idCliente=:idCliente AND fa.estado=1");
 
             if ($sql->execute( array(':idCliente'=>$idCliente))) {
-               return $sql->fetch();
-
-            }else{
-              return 'error';
+             $res= $sql->fetchAll();
             }
+             if(empty(($res))){
+              return 'error';
+             }else{
+              return $res;
+             }
+            $sql->close();
+       }
+
+        public function getSaldoIdModel($idCliente, $table){
+
+            $sql = Conexion::conectar()->prepare("SELECT * FROM $table WHERE idCliente = :idCliente");
+
+            if ($sql->execute( array(':idCliente'=>$idCliente))) {
+             $res= $sql->fetch();
+            }
+             if(empty(($res))){
+              return 'nada';
+             }else{
+              return $res;
+             }
             $sql->close();
        }
 
@@ -87,6 +105,24 @@
         $sql->close();
     }
 
+              public static function addDeudasModel($idCliente, $montoDeuda, $idVendedor ,$tabla)
+    {
+// genera el pago al cliente.
+        $sql = Conexion::conectar()->prepare("INSERT INTO $tabla(idCliente, montoDeuda, idVendedor) 
+          VALUES(:idCliente, :montoDeuda, :idVendedor)");
+        $sql->bindParam(':idCliente', $idCliente);
+        $sql->bindParam(':montoDeuda', $montoDeuda);
+        $sql->bindParam(':idVendedor', $idVendedor);
+
+        if ($sql->execute()) {
+            $sql = Conexion::conectar()->prepare("UPDATE  facturado SET 
+               estado= 0 WHERE idCliente= $idCliente");
+           $sql->execute();
+            return 'success';
+        }
+        $sql->close();
+    }
+
   
 
              static public function addClienteModel($nombreCliente,$telefonoCliente,$direccionCliente, $tabla){
@@ -100,6 +136,15 @@
               $sql->bindParam(':direccionCliente', $direccionCliente);
 
               if ($sql->execute()) {
+
+            $sql1 = Conexion::conectar()->prepare("SELECT MAX(idCliente) as ID FROM clientes");
+            $sql1->execute();
+             $res= $sql1->fetch();
+                 $idCliente =  $res['ID'];
+                  $sql2 = Conexion::conectar()->prepare("INSERT INTO saldos
+                (idCliente) VALUES(:idCliente)");
+              $sql2->bindParam(':idCliente', $idCliente);
+                 $sql2->execute();
               	return 'success';
               }else{
               return 'error';
