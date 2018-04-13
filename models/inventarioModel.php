@@ -68,6 +68,7 @@
 
             $sql = Conexion::conectar()->prepare("SELECT  *  FROM $table de  
               JOIN clientes cli ON cli.idCliente=de.idCliente 
+              -- JOIN detalles det ON de.nroTropa=det.nroTropa 
               ORDER BY idFacturado DESC
              ");
 
@@ -260,8 +261,9 @@
 
 
 
-            $sql3 = Conexion::conectar()->prepare("INSERT INTO detalles(kilo,nroTropa, descripcion,cantidad,precio,fecha,nroFactura,idInventario,idCliente)
-  SELECT temm.kilo,temm.nroTropa,temm.descripcionMedia,temm.cantidad,temm.precio,temm.fecha,temm.nroFactura,temm.idInventario,temm.idCliente FROM tempmedia temm");
+            $sql3 = Conexion::conectar()->prepare("INSERT INTO detalles(kilo,nroTropa, descripcion,cantidad,precio, fecha,nroFactura,idInventario,idCliente)
+  SELECT temm.kilo,temm.nroTropa,temm.descripcionMedia,temm.cantidad,temm.precio,temm.fecha, 
+  temm.nroFactura,temm.idInventario,temm.idCliente FROM tempmedia temm");
           $sql3->execute();
 
 
@@ -277,16 +279,17 @@
              $sql57->bindParam(':idAdmin', $idAdmin);
           $sql57->execute();
 
-         $sql571 = Conexion::conectar()->prepare("INSERT INTO cuentacorriente(comprobante,entrada,idCliente, fecha)
-              VALUES(:nroFactura,:totalVenta,:idCliente,:fecha)");
-         $fa = 'Factura '. ' '. $nroFactura;
-              $sql571->bindParam(':nroFactura', $fa);
+         $sql571 = Conexion::conectar()->prepare("INSERT INTO cuentacorriente(comprobante,entrada,idCliente, fecha , nroFactura)
+              VALUES(:comprobante,:totalVenta,:idCliente,:fecha, :nroFactura)");
+         $fa = "Factura". ' '. $nroFactura;
+              $sql571->bindParam(':comprobante', $fa);
              $sql571->bindParam(':totalVenta', $total);
              $sql571->bindParam(':idCliente', $idCliente);
              $sql571->bindParam(':fecha', $hoy);
+             $sql571->bindParam(':nroFactura', $nroFactura);
           $sql571->execute();
 
-             $sql1 = Conexion::conectar()->prepare("UPDATE saldos SET saldoActual= saldoActual + $total  WHERE idCliente=:idCliente " );
+             $sql1 = Conexion::conectar()->prepare("UPDATE saldos SET saldoActual= saldoActual + $total, saldoFinal= saldoFinal + $total  WHERE idCliente=:idCliente " );
               $sql1->bindParam(':idCliente', $idCliente);
              
               $sql1->execute();

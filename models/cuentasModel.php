@@ -17,10 +17,25 @@
    	   	    }
             $sql->close();
    	   }
+
+              
+         public function getCuentasModelId($idCliente, $table){
+            $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
+              JOIN clientes cli ON cli.idCliente= ta.idCliente
+              -- JOIN vendedores ve ON ta.idVendedor= ve.idVendedor 
+              WHERE ta.idCliente = :idCliente ");
+            if ($sql->execute( array(':idCliente'=>$idCliente))) {
+               return $sql->fetch();
+            }else{
+              return 'errors';
+            }
+            $sql->close();
+       }
          public function getPagosModel($table){
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
               JOIN clientes cli ON cli.idCliente= ta.idCliente
+              JOIN vendedores ve ON ta.idVendedor= ve.idVendedor 
               ORDER BY ta.fechaPago  DESC");
 
             if ($sql->execute()) {
@@ -32,33 +47,56 @@
        }
 
 
-         public function getCuentasModelId($idCliente, $table){
+         public function getDetallesFacturaModel($idCliente, $fechaInicial, $fechaFinal, $table){
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
-              JOIN clientes cli ON cli.idCliente= ta.idCliente
-              -- JOIN vendedores ve ON ta.idVendedor= ve.idVendedor 
-              WHERE ta.idCliente = :idCliente ");
+             JOIN facturado det ON ta.nroFactura= det.nroFactura
+              WHERE ta.idCliente = :idCliente AND ta.fecha  BETWEEN :fechaInicial AND :fechaFinal");
 
-            if ($sql->execute( array(':idCliente'=>$idCliente))) {
+            if ($sql->execute( array(
+                                  ':idCliente'=>$idCliente,
+                                   ':fechaInicial'=>$fechaInicial,
+                                    ':fechaFinal'=>$fechaFinal,
+                                  ))) {
+               return $sql->fetchAll();
+
+            }else{
+              return 'error detalles';
+            }
+            $sql->close();
+       }
+
+
+         public function getTotalKilosModel($idCliente, $fechaInicial, $fechaFinal, $table){
+
+            $sql = Conexion::conectar()->prepare("SELECT SUM(kilo) AS totalKilos FROM $table ta 
+              WHERE ta.idCliente = :idCliente AND ta.fecha  BETWEEN :fechaInicial AND :fechaFinal");
+
+            if ($sql->execute( array(
+                                  ':idCliente'=>$idCliente,
+                                   ':fechaInicial'=>$fechaInicial,
+                                    ':fechaFinal'=>$fechaFinal,
+                                  ))) {
                return $sql->fetch();
 
             }else{
-              return 'errors';
+              return 'error detalles';
             }
             $sql->close();
        }
 
 
 
+
          public function getEntradaModelId($idCliente, $table){
 
-            $sql = Conexion::conectar()->prepare("SELECT SUM(entrada) AS totalEntrada  FROM $table  WHERE idCliente = :idCliente AND estado = 1");
+            $sql = Conexion::conectar()->prepare("SELECT SUM(entrada) AS totalEntrada  FROM $table  WHERE idCliente = :idCliente");
 
             if ($sql->execute( array(':idCliente'=>$idCliente))) {
                return $sql->fetch();
 
             }else{
-              return 'errors';
+              return 'errors de cuentas';
             }
             $sql->close();
        }
@@ -67,7 +105,7 @@
 
          public function getSalidaModelId($idCliente, $table){
 
-            $sql = Conexion::conectar()->prepare("SELECT SUM(pagos) AS totalSalida  FROM $table  WHERE idCliente = :idCliente AND estado = 1");
+            $sql = Conexion::conectar()->prepare("SELECT SUM(pagos) AS totalSalida  FROM $table  WHERE idCliente = :idCliente");
 
             if ($sql->execute( array(':idCliente'=>$idCliente))) {
                return $sql->fetch();
@@ -80,9 +118,10 @@
          public function getTodoModelId($idCliente, $fechaInicial, $fechaFinal,  $table){
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
+             -- LEFT JOIN detalles de ON de.nroFactura=ta.nroFactura
              LEFT JOIN clientes cli ON cli.idCliente= ta.idCliente
              LEFT JOIN vendedores ve ON ta.idVendedor= ve.idVendedor 
-              WHERE ta.idCliente = :idCliente AND ta.estado = 1 AND ta.fecha 
+              WHERE ta.idCliente = :idCliente  AND ta.fecha 
               BETWEEN :fechaInicial AND :fechaFinal ORDER BY ta.fecha ASC ");
               
             if ($sql->execute( array(
@@ -106,18 +145,13 @@
               $cheque,
               $nroCheque,
               $banco,
-              $propietario, $tabla){
+              $propietario,
+              $idVendedor , $tabla){
 
-           $sql1 = Conexion::conectar()->prepare("SELECT idCliente FROM deudas WHERE idCliente= :idCliente");
-           $sql1->execute(array(':idCliente'=>$idCliente));
-           $result= $sql1->fetch();
- 
-                  if ($result == "") {
-                     return 'noCliente';
-                  }else{
+        
 
-            $sql = Conexion::conectar()->prepare("INSERT INTO $tabla(idCliente, comprobante, monto, efectivo, cheque, nroCheque, banco,propietario)
-              VALUES(:idCliente,:comprobante, :monto , :efectivo,:cheque,:nroCheque, :banco, :propietario)");
+            $sql = Conexion::conectar()->prepare("INSERT INTO $tabla(idCliente, comprobante, monto, efectivo, cheque, nroCheque, banco,propietario, idVendedor)
+              VALUES(:idCliente,:comprobante, :monto , :efectivo,:cheque,:nroCheque, :banco, :propietario,:idVendedor)");
               $sql->bindParam(':idCliente', $idCliente);
               $sql->bindParam(':comprobante', $comprobante);
               $sql->bindParam(':monto', $monto);
@@ -126,21 +160,16 @@
               $sql->bindParam(':nroCheque', $nroCheque);
               $sql->bindParam(':banco', $banco);
               $sql->bindParam(':propietario', $propietario);
-
+              $sql->bindParam(':idVendedor', $idVendedor);
+              // $ven=1; // vendedor
               if ($sql->execute()) {
-              
-                 $sql1 = Conexion::conectar()->prepare("SELECT SUM(montoDeuda)AS suma,idVendedor FROM deudas 
-                  WHERE idCliente = :idCliente");
-               $sql1->bindParam(':idCliente', $idCliente);
-               $sql1->execute();
-              $res= $sql1->fetch();
-                 $saldo =  $res['suma'] - $monto;
-                 $ven =  $res['idVendedor'];
-              
-               $sql3 = Conexion::conectar()->prepare("UPDATE  saldos SET  saldoActual=  $saldo, saldoFinal=  $saldo , 
-               idVendedor=$ven WHERE idCliente = :idCliente");
+   
+               $sql3 = Conexion::conectar()->prepare("UPDATE  saldos SET  saldoActual= saldoActual- $monto, saldoFinal= saldoFinal-  $monto , 
+               idVendedor=$idVendedor WHERE idCliente = :idCliente");
                $sql3->bindParam(':idCliente', $idCliente);
                 $sql3->execute();
+
+
 
 
             $sql41 = Conexion::conectar()->prepare("INSERT INTO cuentacorriente(comprobante,
@@ -151,7 +180,7 @@
               $sql41->bindParam(':pagos', $monto);
               $sql41->bindParam(':idCliente', $idCliente);
               $sql41->bindParam(':fecha', $hoy);
-              $sql41->bindParam(':idVendedor', $ven);
+              $sql41->bindParam(':idVendedor', $idVendedor);
               $sql41->execute();
 
 
@@ -169,19 +198,14 @@
               $sql11->bindParam(':idCliente', $idCliente);
               $sql11->bindParam(':id', $id);
                $sql11->execute();
-            $sql4 = Conexion::conectar()->prepare("DELETE FROM  deudas WHERE idCliente = :idCliente");
-               $sql4->bindParam(':idCliente', $idCliente);
-                $sql4->execute();
-
+               
+          
                 return 'success';
               }else{
               return 'errorers';
             }
                $sql->close();
 
-
-
-       }
     }
 
 
@@ -252,10 +276,3 @@
 
 
      }
-
-//     SELECT DISTINCt *
-// FROM saldos ta
-// JOIN clientes cli ON cli.idCliente= ta.idCliente
-// JOIN facturado fa on fa.idCliente= ta.idCliente
-// join pagos pa on pa.idCliente= fa.idCliente
-// WHERE ta.idCliente=1 and fa.estado=0

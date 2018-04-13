@@ -53,6 +53,73 @@
         }
 
 
+     public function getDetallesFacturaController(){
+
+         $data = file_get_contents("php://input");
+             $request = json_decode($data);
+             $request = (array) $request;
+                
+            
+              $idCliente =$request['idCliente'];
+              $fechaInicial =$request['fechaInicial'];
+              $fechaFinal =$request['fechaFinal'];
+                if (empty($fechaInicial) && empty($fechaFinal)) {
+                $fechaInicials ='2015-01-01';
+                $fechaFinals ='2100-01-01';
+               
+                $respuesta = CuentasModel::getDetallesFacturaModel($idCliente,$fechaInicials, $fechaFinals ,  'detalles');
+                  
+                    echo json_encode($respuesta);
+                 
+          
+              }else{
+              
+                $respuesta = CuentasModel::getDetallesFacturaModel($idCliente,$fechaInicial, 
+                    $fechaFinal ,  'detalles');
+
+                    echo json_encode($respuesta);
+              
+                 
+              }
+              
+
+        }
+
+
+     public function gettotalKilosController(){
+
+         $data = file_get_contents("php://input");
+             $request = json_decode($data);
+             $request = (array) $request;
+                
+            
+              $idCliente =$request['idCliente'];
+              $fechaInicial =$request['fechaInicial'];
+              $fechaFinal =$request['fechaFinal'];
+                if (empty($fechaInicial) && empty($fechaFinal)) {
+                $fechaInicials ='2015-01-01';
+                $fechaFinals ='2100-01-01';
+                // $idCliente=1;
+                $respuesta = CuentasModel::getTotalKilosModel($idCliente,$fechaInicials, $fechaFinals ,  'detalles');
+                  
+                    echo json_encode($respuesta);
+                 
+          
+              }else{
+              
+                $respuesta = CuentasModel::getTotalKilosModel($idCliente,$fechaInicial, 
+                    $fechaFinal ,  'detalles');
+
+                    echo json_encode($respuesta);
+              
+                 
+              }
+              
+
+        }
+
+
+
 
   	 public function getEntradaControllerId(){
 
@@ -142,6 +209,7 @@
               $nroCheque =$request['nroCheque'];
               $banco =$request['banco'];
               $propietario =$request['propietario'];
+              $idVendedor =$request['idVendedor'];
               // $idCliente =1;
 			 			  
 			      $respuesta = CuentasModel::addCuentasModel(
@@ -153,6 +221,7 @@
 			      	$nroCheque,
 			      	$banco,
 			      	$propietario,
+                $idVendedor,
 			      	'pagos');
 
 			       if ($respuesta) {
@@ -209,6 +278,20 @@
       if ($_GET['id'] == "getSaldos") {
         $delete = new CuentasController;
         $delete->getCuentasController();  
+      }
+   }
+
+   if(isset($_GET['id'])){
+      if ($_GET['id'] == "getDetallesFac") {
+        $delete = new CuentasController;
+        $delete->getDetallesFacturaController();  
+      }
+   }
+
+ if(isset($_GET['id'])){
+      if ($_GET['id'] == "totalKilos") {
+        $delete = new CuentasController;
+        $delete->gettotalKilosController();  
       }
    }
 

@@ -32,7 +32,7 @@
      public function getFacturasController(){
         
       $respuesta = InventarioModel::getDetallesModel('facturado');
-      $data = date('Y-m-d');
+      // $data = date('Y-m-d');
       // echo $data;
 
        if ($respuesta) {
@@ -173,7 +173,7 @@
                 
             
               $idCuarteoInventario =$request['idCuarteoInventario'];
-              // $idCuarteoInventario =1;
+              // $idCuarteoInventario =10;
          $respuesta = InventarioModel::masInfoCuarteoModel($idCuarteoInventario, 'cuarteoinventario');
 
          if ($respuesta) {

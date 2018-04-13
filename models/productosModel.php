@@ -7,7 +7,7 @@
   	     public function getProductosModel($table){
 
 
-   	   	    $sql = Conexion::conectar()->prepare("SELECT * FROM $table ORDER BY idProductos DESC");
+   	   	    $sql = Conexion::conectar()->prepare("SELECT * FROM $table  ORDER BY idProductos DESC");
 
    	   	    if ($sql->execute()) {
    	   	    	 return $sql->fetchAll();
