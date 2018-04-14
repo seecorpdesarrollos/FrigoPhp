@@ -269,6 +269,56 @@
         }
 
 
+        // principal panel
+        // ////////////////
+        // ////////////////
+
+     public function getInventarioTropaController(){
+
+          $respuesta = CuentasModel::getInventarioTropaModel('inventario');
+
+             if ($respuesta) {
+              
+                echo json_encode($respuesta);
+             
+             }
+     }
+
+       public function getInventarioTropaDisponibleController(){
+
+          $respuesta = CuentasModel::getInventarioTropaDisponibleModel('inventario');
+
+             if ($respuesta) {
+              
+                echo json_encode($respuesta);
+             
+             }
+     }
+
+
+     public function getInventarioTropaVendidoController(){
+
+          $respuesta = CuentasModel::getInventarioTropaVendidoModel('inventario');
+
+             if ($respuesta) {
+              
+                echo json_encode($respuesta);
+             
+             }
+     }
+
+
+       public function getCantController(){
+
+          $respuesta = CuentasModel::getCantModel('productos');
+
+             if ($respuesta) {
+              
+                echo json_encode($respuesta);
+             
+             }
+     }
+
 
 }
 
@@ -345,5 +395,39 @@
       if ($_GET['id'] == "addPagoss") {
         $delete = new CuentasController;
         $delete->addCuentasControllers();  
+      }
+   }
+
+
+   // panel principal
+   // 
+   
+    if(isset($_GET['id'])){
+      if ($_GET['id'] == "getInventarioTropa") {
+        $delete = new CuentasController;
+        $delete->getInventarioTropaController();  
+      }
+   }
+
+
+    if(isset($_GET['id'])){
+      if ($_GET['id'] == "getInventarioTropaDisponible") {
+        $delete = new CuentasController;
+        $delete->getInventarioTropaDisponibleController();  
+      }
+   }
+
+      if(isset($_GET['id'])){
+      if ($_GET['id'] == "getInventarioTropaVendido") {
+        $delete = new CuentasController;
+        $delete->getInventarioTropaVendidoController();  
+      }
+   }
+
+
+      if(isset($_GET['id'])){
+      if ($_GET['id'] == "getCant") {
+        $delete = new CuentasController;
+        $delete->getCantController();  
       }
    }

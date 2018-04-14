@@ -270,9 +270,57 @@
                $sql->close();
     }
        
-       
+       // panel principal
+       // 
            
+       public function getInventarioTropaModel($table){
 
+            $sql = Conexion::conectar()->prepare("SELECT nroTropa , estado,  COUNT(*) as total from inventario WHERE  estado = 'cuarteo'  GROUP BY nroTropa");
+
+            if ($sql->execute()) {
+              return $sql->fetchAll();
+            }else{
+              return 'error';
+            }
+            $sql->close();
+       }
+
+          public function getInventarioTropaDisponibleModel($table){
+
+            $sql = Conexion::conectar()->prepare("SELECT nroTropa , estado,  COUNT(*) as total from inventario WHERE  estado = 'Disponible'  GROUP BY nroTropa");
+
+            if ($sql->execute()) {
+              return $sql->fetchAll();
+            }else{
+              return 'error';
+            }
+            $sql->close();
+       }
+
+
+        public function getInventarioTropaVendidoModel($table){
+
+            $sql = Conexion::conectar()->prepare("SELECT nroTropa , estado,  COUNT(*) as total from inventario WHERE  estado = 'Vendida'  GROUP BY nroTropa");
+
+            if ($sql->execute()) {
+              return $sql->fetchAll();
+            }else{
+              return 'error';
+            }
+            $sql->close();
+       }
+
+        public function getCantModel($table){
+
+            $sql = Conexion::conectar()->prepare("SELECT nroTropa , cantMedia  From $table order by nroTropa asc");
+
+            if ($sql->execute()) {
+              return $sql->fetchAll();
+            }else{
+              return 'error';
+            }
+            $sql->close();
+       }
 
 
      }
