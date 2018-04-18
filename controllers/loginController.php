@@ -7,7 +7,7 @@
 
       public function getUsuarioController(){
 
-     $ip = $_SERVER['REMOTE_ADDR'];
+  
       $data = file_get_contents("php://input");
       $request = json_decode($data);
       $request = (array) $request;
@@ -20,9 +20,9 @@
                
             );
        
-        $respuesta = UsuarioModel::getUsuarioModel($datosController, $ip , 'admin');
+        $respuesta = UsuarioModel::getUsuarioModel($datosController, 'admin');
 
-        echo $respuesta ;
+        echo  json_encode($respuesta) ;
          
       }
 
@@ -58,6 +58,21 @@
         echo $respuesta ;
       }
 
+       public function deleteEstadoController(){
+
+      $data = file_get_contents("php://input");
+      $request = json_decode($data);
+      $request = (array) $request;
+
+      
+        // $idAdmin =1;
+        $idAdmin =$request['idAdmin'];
+       
+          $respuesta = UsuarioModel::deleteEstadoModel($idAdmin , 'admin');
+        
+        echo $respuesta ;
+      }
+
   }
 
    
@@ -65,6 +80,13 @@
       if ($_GET['id'] == "getUsuarios") {
          $usuario = new UsuarioController;
          $usuario->getUsuarioController();
+      }
+   }
+
+       if(isset($_GET['id'])){
+      if ($_GET['id'] == "delete") {
+         $usuario = new UsuarioController;
+         $usuario->deleteEstadoController();
       }
    }
 
