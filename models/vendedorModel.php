@@ -4,7 +4,7 @@
 
   class VendedorModel{
 
-  	     public function getVendedoresModel($table){
+  	     static public function getVendedoresModel($table){
 
    	   	    $sql = Conexion::conectar()->prepare("SELECT * FROM $table WHERE estado = 1  ORDER BY idVendedor ASC");
 
@@ -16,7 +16,7 @@
    	   	    }
             $sql->close();
    	   }
-               public function getVendedoresInactivosModel($table){
+               static public function getVendedoresInactivosModel($table){
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table WHERE estado = 0  ORDER BY idVendedor ASC");
 
@@ -30,7 +30,7 @@
        }
 
 
-         public function getInventarioTotalModel($nroTropa , $table){
+         static public function getInventarioTotalModel($nroTropa , $table){
 
 
             $sql = Conexion::conectar()->prepare("SELECT sum(kiloMedia) as total FROM $table  WHERE nroTropa=:nroTropa ");
@@ -44,7 +44,7 @@
             $sql->close();
        }
 
-          public function getVendedorIdModel($idVendedor, $table){
+          static public function getVendedorIdModel($idVendedor, $table){
 
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table 
@@ -60,7 +60,7 @@
        }
 
 
-      public function getInventarioIdModel($idInventario, $table){
+      static public function getInventarioIdModel($idInventario, $table){
 
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table
@@ -76,7 +76,7 @@
        }
 
 
-         public static function bajaVendedorModel($datosModel, $tabla)
+         static public  function bajaVendedorModel($datosModel, $tabla)
     {
 
         $sql = Conexion::conectar()->prepare("UPDATE $tabla SET estado = 0  WHERE idVendedor = :idVendedor");
@@ -88,7 +88,7 @@
         $sql->close();
     }
 
-             public static function altaVendedorModel($datosModel, $tabla)
+             static public  function altaVendedorModel($datosModel, $tabla)
     {
 
         $sql = Conexion::conectar()->prepare("UPDATE $tabla SET estado = 1  WHERE idVendedor = :idVendedor");
@@ -100,7 +100,7 @@
         $sql->close();
     }
 
-              public function getProductosModelId($datosModel , $table){
+              static public function getProductosModelId($datosModel , $table){
 
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table WHERE idProductos = :idProductos");
@@ -117,7 +117,7 @@
 
 
 
-             public function addVendedorModel($nombreVendedor,$telefonoVendedor, $tabla){
+             static public function addVendedorModel($nombreVendedor,$telefonoVendedor, $tabla){
 
                $sql = Conexion::conectar()->prepare("INSERT INTO $tabla
                 (nombreVendedor,telefonoVendedor)
@@ -133,7 +133,7 @@
 
          }
 
-          public function editarVendedorModel($nombreVendedor,$telefonoVendedor, $idVendedor, $tabla){
+          static public function editarVendedorModel($nombreVendedor,$telefonoVendedor, $idVendedor, $tabla){
 
                $sql = Conexion::conectar()->prepare("UPDATE  $tabla SET 
                 nombreVendedor = :nombreVendedor , telefonoVendedor= :telefonoVendedor WHERE idVendedor=:idVendedor");
@@ -149,7 +149,7 @@
 
          }
 
-      public function comprobarVendedorModel($nombreVendedor , $table){
+      static public function comprobarVendedorModel($nombreVendedor , $table){
 
   $sql = Conexion::conectar()->prepare("SELECT * FROM $table 
               WHERE nombreVendedor = :nombreVendedor");

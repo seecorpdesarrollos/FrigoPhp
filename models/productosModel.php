@@ -4,7 +4,7 @@
 
   class AgregarProductosModel{
 
-  	     public function getProductosModel($table){
+  	     static public function getProductosModel($table){
 
 
    	   	    $sql = Conexion::conectar()->prepare("SELECT * FROM $table  ORDER BY idProductos DESC");
@@ -19,7 +19,7 @@
    	   }
 
 
-         public static function deleteProductosModel($datosModel, $tabla)
+         static public  function deleteProductosModel($datosModel, $tabla)
     {
 
         $sql = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE idProductos = :idProductos");
@@ -31,7 +31,7 @@
         $sql->close();
     }
 
-              public function getProductosModelId($datosModel , $table){
+              static public function getProductosModelId($datosModel , $table){
 
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table WHERE idProductos = :idProductos");
@@ -48,7 +48,7 @@
 
 
 
-             public function addProductosModel($dueHacienda,
+             static public function addProductosModel($dueHacienda,
                                              $cantCabeza,
                                              $cantMedia,
                                              $fechaFaena,
@@ -74,7 +74,7 @@
 
   }
 
-        public function editarProductosModel($dueHacienda,
+        static public function editarProductosModel($dueHacienda,
                                              $cantCabeza,
                                              $cantMedia,
                                              $fechaFaena,

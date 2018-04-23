@@ -4,7 +4,7 @@ require_once 'conexion.php';
 
  class AdminModel{
 
- 	 public function getAdminModel( $tabla){
+ 	  static public function getAdminModel( $tabla){
 
           $sql = Conexion::conectar()->prepare("SELECT * FROM $tabla" );
           $sql->execute();
@@ -13,7 +13,7 @@ require_once 'conexion.php';
  	 }
 
 
-   public function getAdminModelActual( $idAdmin, $tabla){
+   static public function getAdminModelActual( $idAdmin, $tabla){
 
           $sql = Conexion::conectar()->prepare("SELECT * FROM $tabla WHERE idAdmin = :idAdmin" );
           $sql->execute(array(':idAdmin'=>$idAdmin));
@@ -26,7 +26,7 @@ require_once 'conexion.php';
            }
             $sql->close();
    }
- 	  public function getAdminModelActivo($tabla){
+ 	  static public function getAdminModelActivo($tabla){
 
           $sql = Conexion::conectar()->prepare("SELECT * ,  COUNT(estado) AS TOTAL FROM $tabla" );
           $sql->execute();
@@ -34,7 +34,7 @@ require_once 'conexion.php';
             $sql->close();
  	 }
 
- 	   public function getAdminModelUsuario($tabla){
+ 	   static public function getAdminModelUsuario($tabla){
 
           $sql = Conexion::conectar()->prepare("SELECT * FROM $tabla" );
           $sql->execute();
@@ -42,7 +42,7 @@ require_once 'conexion.php';
             $sql->close();
  	 }
 
-     public function addUsuarioModel( $nombreAdmin ,$password,$rol , $tabla){
+     static public function addUsuarioModel( $nombreAdmin ,$password,$rol , $tabla){
        
         $sql1 = Conexion::conectar()->prepare("INSERT INTO   $tabla (nombreAdmin, password, rol)
          VALUES(:nombreAdmin, :password, :rol)");
@@ -60,6 +60,20 @@ require_once 'conexion.php';
              $sql->close();
 
       }
+
+                static public  function updateUsuarioModel($password , $rol,  $idAdmin,  $tabla)
+    {
+
+        $sql = Conexion::conectar()->prepare("UPDATE $tabla SET password = :password, rol=:rol  WHERE idAdmin = :idAdmin");
+        $sql->bindParam(':password', $password);
+        $sql->bindParam(':rol', $rol);
+        $sql->bindParam(':idAdmin', $idAdmin);
+
+        if ($sql->execute()) {
+            return 'success';
+        }
+        $sql->close();
+    }
 
  }
  ob_end_flush();

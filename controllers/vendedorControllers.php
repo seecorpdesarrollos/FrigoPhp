@@ -5,7 +5,7 @@
    require_once '../models/vendedorModel.php';
    class VendedoresController{
 
-   	  	public function getVendedoresController(){
+   	  	static public function getVendedoresController(){
  			  
       $respuesta = VendedorModel::getVendedoresModel('vendedores');
 
@@ -18,7 +18,7 @@
         }
 
 
-      public function getVendedoresInactivosController(){
+      static public function getVendedoresInactivosController(){
         
       $respuesta = VendedorModel::getVendedoresInactivosModel('vendedores');
 
@@ -32,7 +32,7 @@
 
  
 
-      public function getVendedoresControllerId(){
+      static public function getVendedoresControllerId(){
               $data = file_get_contents("php://input");
              $request = json_decode($data);
              $request = (array) $request;
@@ -49,7 +49,7 @@
 
         }
 
-             public function getInventarioIdController(){
+             static public function getInventarioIdController(){
               $data = file_get_contents("php://input");
              $request = json_decode($data);
              $request = (array) $request;
@@ -66,7 +66,7 @@
 
         }
 
-          public function getInventarioTotalTropaController(){
+          static public function getInventarioTotalTropaController(){
               $data = file_get_contents("php://input");
              $request = json_decode($data);
              $request = (array) $request;
@@ -85,7 +85,7 @@
 
 
 
-   	  public function  agregarVendedorController(){
+   	  static public function  agregarVendedorController(){
              
 
               $data = file_get_contents("php://input");
@@ -107,7 +107,7 @@
 
    	   }
 
-         public function  editarVendedorController(){
+         static public function  editarVendedorController(){
              
 
               $data = file_get_contents("php://input");
@@ -133,7 +133,7 @@
 
 
   
-        public function bajaVendedorController(){
+        static public function bajaVendedorController(){
        	  $data = file_get_contents("php://input");
     		  $request = json_decode($data);
     		  $request = (array) $request;
@@ -151,7 +151,7 @@
          			 }
         }
 
-        public function altaVendedorController(){
+        static public function altaVendedorController(){
           $data = file_get_contents("php://input");
           $request = json_decode($data);
           $request = (array) $request;
@@ -170,7 +170,7 @@
         }
 
 
-       public function comprobarVendedorController(){
+       static public function comprobarVendedorController(){
           $data = file_get_contents("php://input");
           $request = json_decode($data);
           $request = (array) $request;

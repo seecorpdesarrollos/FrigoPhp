@@ -5,7 +5,7 @@
    require_once '../models/clienteModel.php';
    class ClientesController{
 
-   	  	public function getClientesController(){
+   	  	static public function getClientesController(){
  			  
       $respuesta = ClientesModel::getClientesModel('clientes');
 
@@ -17,7 +17,7 @@
 
         }
 
-          public function getClientesTodosController(){
+          static public function getClientesTodosController(){
         
       $respuesta = ClientesModel::getClientesTodosModel('clientes');
 
@@ -30,7 +30,7 @@
         }
 
 
-      public function getClientesInactivosController(){
+      static public function getClientesInactivosController(){
         
       $respuesta = ClientesModel::getClientesInactivosModel('clientes');
 
@@ -44,7 +44,7 @@
 
  
 
-      public function getClienteControllerId(){
+      static public function getClienteControllerId(){
               $data = file_get_contents("php://input");
              $request = json_decode($data);
              $request = (array) $request;
@@ -63,7 +63,7 @@
         }
 
 
-      public function getSaldoControllerId(){
+      static public function getSaldoControllerId(){
               $data = file_get_contents("php://input");
              $request = json_decode($data);
              $request = (array) $request;
@@ -82,7 +82,7 @@
         }
 
 
-         public function getClienteFacturadoControllerId(){
+         static public function getClienteFacturadoControllerId(){
               $data = file_get_contents("php://input");
              $request = json_decode($data);
              $request = (array) $request;
@@ -103,7 +103,7 @@
            
 
 
-   	  public function  agregarClienteController(){
+   	  static public function  agregarClienteController(){
              
 
               $data = file_get_contents("php://input");
@@ -128,7 +128,7 @@
 
    	   }
 
-         public function  editarClientesController(){
+         static public function  editarClientesController(){
              
 
               $data = file_get_contents("php://input");
@@ -158,7 +158,7 @@
 
 
   
-        public function bajaClienteController(){
+        static public function bajaClienteController(){
        	  $data = file_get_contents("php://input");
     		  $request = json_decode($data);
     		  $request = (array) $request;
@@ -176,7 +176,7 @@
          			 }
         }
 
-        public function altaClienteController(){
+        static public function altaClienteController(){
           $data = file_get_contents("php://input");
           $request = json_decode($data);
           $request = (array) $request;
@@ -195,7 +195,7 @@
         }
 
 
-       public function comprobarVendedorController(){
+       static public function comprobarVendedorController(){
           $data = file_get_contents("php://input");
           $request = json_decode($data);
           $request = (array) $request;
@@ -215,7 +215,7 @@
         }
 
 
-       public function addDeudaController(){
+       static public function addDeudaController(){
           $data = file_get_contents("php://input");
           $request = json_decode($data);
           $request = (array) $request;

@@ -4,7 +4,7 @@
 
   class NotasModel{
 
-  	     public function getNotasCreditoModel($table){
+  	     static public function getNotasCreditoModel($table){
 
 
    	   	    $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
@@ -20,7 +20,7 @@
    	   }
 
 
-         public function addNotasCreditoModel(
+         static public function addNotasCreditoModel(
               $descripcionCredito,
               $cantidadCredito,
               $importeCredito,   
@@ -114,7 +114,7 @@
 
 
 
-         public function deleteNotasCreditoModel(
+         static public function deleteNotasCreditoModel(
               $idNotaCredito,                 
               $idCliente,
               $totalCredito,   
@@ -167,7 +167,7 @@
 // notas de debitos
     // =================================================================
 
- public function getNotasDebitoModel($table){
+ static public function getNotasDebitoModel($table){
 
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
@@ -182,7 +182,7 @@
             $sql->close();
        }
 
-  public function addNotasDebitoModel(
+  static public function addNotasDebitoModel(
               $descripcionDebito,
               $cantidadDebito,
               $importeDebito,
@@ -291,7 +291,7 @@
 
    
 
-  public function addNotasDebitoSinChequeModel(
+  static public function addNotasDebitoSinChequeModel(
               $descripcionDebito,
               $cantidadDebito,
               $importeDebito,

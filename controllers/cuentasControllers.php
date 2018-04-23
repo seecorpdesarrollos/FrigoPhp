@@ -5,7 +5,7 @@
    require_once '../models/cuentasModel.php';
    class CuentasController{
   
-    public function getPagosController(){
+    static public function getPagosController(){
 			 			  
 			      $respuesta = CuentasModel::getPagosModel('pagos');
 
@@ -19,7 +19,7 @@
 
 
 
-         	 public function getCuentasController(){
+         	 static public function getCuentasController(){
 			 			  
 			      $respuesta = CuentasModel::getCuentasModel('saldos');
 
@@ -32,7 +32,7 @@
         }
 
 
-  	 public function getCuentasControllerId(){
+  	 static public function getCuentasControllerId(){
 
   	 	   $data = file_get_contents("php://input");
              $request = json_decode($data);
@@ -53,7 +53,7 @@
         }
 
 
-     public function getDetallesFacturaController(){
+     static public function getDetallesFacturaController(){
 
          $data = file_get_contents("php://input");
              $request = json_decode($data);
@@ -86,7 +86,7 @@
         }
 
 
-     public function gettotalKilosController(){
+     static public function gettotalKilosController(){
 
          $data = file_get_contents("php://input");
              $request = json_decode($data);
@@ -121,7 +121,7 @@
 
 
 
-  	 public function getEntradaControllerId(){
+  	 static public function getEntradaControllerId(){
 
   	 	   $data = file_get_contents("php://input");
              $request = json_decode($data);
@@ -143,7 +143,7 @@
 
 
 
-  	 public function getSalidaControllerId(){
+  	 static public function getSalidaControllerId(){
 
   	 	   $data = file_get_contents("php://input");
              $request = json_decode($data);
@@ -163,7 +163,7 @@
 
         }
 
-          	 public function getTodoController(){
+          	 static public function getTodoController(){
 
   	 	   $data = file_get_contents("php://input");
              $request = json_decode($data);
@@ -195,7 +195,7 @@
 
 
 
-  	 public function addCuentasController(){
+  	 static public function addCuentasController(){
 
   	 	   $data = file_get_contents("php://input");
              $request = json_decode($data);
@@ -233,7 +233,7 @@
         }
 
 
-         public function addCuentasControllers(){
+         static public function addCuentasControllers(){
 
   	 	   $data = file_get_contents("php://input");
              $request = json_decode($data);
@@ -273,7 +273,7 @@
         // ////////////////
         // ////////////////
 
-     public function getInventarioTropaController(){
+     static public function getInventarioTropaController(){
 
           $respuesta = CuentasModel::getInventarioTropaModel('inventario');
 
@@ -284,7 +284,7 @@
              }
      }
 
-       public function getInventarioTropaDisponibleController(){
+       static public function getInventarioTropaDisponibleController(){
 
           $respuesta = CuentasModel::getInventarioTropaDisponibleModel('inventario');
 
@@ -296,7 +296,7 @@
      }
 
 
-     public function getInventarioTropaVendidoController(){
+     static public function getInventarioTropaVendidoController(){
 
           $respuesta = CuentasModel::getInventarioTropaVendidoModel('inventario');
 
@@ -308,7 +308,7 @@
      }
 
 
-       public function getCantController(){
+       static public function getCantController(){
 
           $respuesta = CuentasModel::getCantModel('productos');
 

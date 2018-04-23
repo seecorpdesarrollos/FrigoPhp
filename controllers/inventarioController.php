@@ -5,7 +5,7 @@
    require_once '../models/inventarioModel.php';
    class InventarioController{
 
-   	  	public function getInventarioController(){
+   	  	static public function getInventarioController(){
  			  
       $respuesta = InventarioModel::getInventarioModel('inventario');
 
@@ -17,7 +17,7 @@
 
         }
 
-                public function getFacturaController(){
+                static public function getFacturaController(){
         
       $respuesta = InventarioModel::getFacturasModel('facturas');
 
@@ -29,7 +29,7 @@
 
         }
 
-     public function getFacturasController(){
+     static public function getFacturasController(){
         
       $respuesta = InventarioModel::getDetallesModel('facturado');
       // $data = date('Y-m-d');
@@ -43,7 +43,7 @@
 
         }
 
-                public function getTotalTempController(){
+                static public function getTotalTempController(){
         
       $respuesta = InventarioModel::getTotalTempModel('temp');
 
@@ -55,7 +55,7 @@
 
         }
 
-                   public function getTotalTemp1Controller(){
+                   static public function getTotalTemp1Controller(){
         
       $respuesta = InventarioModel::getTotalTemp1Model('tempmedia');
 
@@ -67,7 +67,7 @@
 
         }
 
-                public function getTemporalController(){
+                static public function getTemporalController(){
         
       $respuesta = InventarioModel::getTemporalModel('temp');
 
@@ -80,7 +80,7 @@
         }
 
 
-                public function getTemporal1Controller(){
+                static public function getTemporal1Controller(){
         
       $respuesta = InventarioModel::getTemporal1Model('tempmedia');
 
@@ -92,7 +92,7 @@
 
         }
 
-                public function getCuarteoController(){
+                static public function getCuarteoController(){
         
       $respuesta = InventarioModel::getCuarteoModel('cuarteo');
 
@@ -104,7 +104,7 @@
 
         }
 
-       public function getCuarteoInventarioController(){
+       static public function getCuarteoInventarioController(){
         
       $respuesta = InventarioModel::getCuarteoInventarioModel('cuarteoinventario');
           
@@ -117,7 +117,7 @@
         }
 
 
-                public function getInventariototalController(){
+                static public function getInventariototalController(){
         
       $respuesta = InventarioModel::getInventariototalesModel('inventario');
 
@@ -129,7 +129,7 @@
 
         }
 
-      public function getInventarioTropaController(){
+      static public function getInventarioTropaController(){
               $data = file_get_contents("php://input");
              $request = json_decode($data);
              $request = (array) $request;
@@ -148,7 +148,7 @@
 
 
     
-      public function getDetallesController(){
+      static public function getDetallesController(){
               $data = file_get_contents("php://input");
              $request = json_decode($data);
              $request = (array) $request;
@@ -166,7 +166,7 @@
         }
 
 
-              public function masInfoCuarteoController(){
+              static public function masInfoCuarteoController(){
               $data = file_get_contents("php://input");
              $request = json_decode($data);
              $request = (array) $request;
@@ -184,7 +184,7 @@
 
         }
 
-             public function getInventarioIdController(){
+             static public function getInventarioIdController(){
               $data = file_get_contents("php://input");
              $request = json_decode($data);
              $request = (array) $request;
@@ -201,7 +201,7 @@
 
         }
 
-          public function getInventarioTotalTropaController(){
+          static public function getInventarioTotalTropaController(){
               $data = file_get_contents("php://input");
              $request = json_decode($data);
              $request = (array) $request;
@@ -220,7 +220,7 @@
 
 
 
-   	  public function  AgregarInventarioController(){
+   	  static public function  AgregarInventarioController(){
              
 
               $data = file_get_contents("php://input");
@@ -243,7 +243,7 @@
    	   }
 
 
-              public function  temporalController(){
+              static public function  temporalController(){
              
 
               $data = file_get_contents("php://input");
@@ -270,7 +270,7 @@
        }
 
 
-             public function  temporal1Controller(){
+             static public function  temporal1Controller(){
              
 
               $data = file_get_contents("php://input");
@@ -297,7 +297,7 @@
        }
      
 
-        public function  addCuarteoController(){
+        static public function  addCuarteoController(){
              
 
               $data = file_get_contents("php://input");
@@ -321,7 +321,7 @@
        }
 
 
-               public function  addInventarioCuarteoController(){
+               static public function  addInventarioCuarteoController(){
              
 
               $data = file_get_contents("php://input");
@@ -359,7 +359,7 @@
        }
 
        }
-         public function  editarInventarioController(){
+         static public function  editarInventarioController(){
              
 
               $data = file_get_contents("php://input");
@@ -383,7 +383,7 @@
        }
 
 
-        public function  editarProductosController(){
+        static public function  editarProductosController(){
              
             $data = file_get_contents("php://input");
             $request = json_decode($data);
@@ -416,7 +416,7 @@
 
        }
   
-        public function deleteProductosController(){
+        static public function deleteProductosController(){
        	  $data = file_get_contents("php://input");
     		  $request = json_decode($data);
     		  $request = (array) $request;
@@ -434,7 +434,7 @@
          			 }
         }
 
-                public function deleteCuarteoController(){
+                static public function deleteCuarteoController(){
           $data = file_get_contents("php://input");
           $request = json_decode($data);
           $request = (array) $request;
@@ -452,7 +452,7 @@
                }
         }
 
-         public function ventasController(){
+         static public function ventasController(){
           $data = file_get_contents("php://input");
           $request = json_decode($data);
           $request = (array) $request;
@@ -478,7 +478,7 @@
 
 
 
-       public function deleteCuarteoIdController(){
+       static public function deleteCuarteoIdController(){
           $data = file_get_contents("php://input");
           $request = json_decode($data);
           $request = (array) $request;
@@ -499,7 +499,7 @@
 
 
 
- public function borrarTempController(){
+ static public function borrarTempController(){
           $data = file_get_contents("php://input");
           $request = json_decode($data);
           $request = (array) $request;
@@ -522,7 +522,7 @@
 
 
 
- public function borrarTemp1Controller(){
+ static public function borrarTemp1Controller(){
           $data = file_get_contents("php://input");
           $request = json_decode($data);
           $request = (array) $request;
@@ -542,7 +542,7 @@
         }
 
      
-       public function comprobarInventarioController(){
+       static public function comprobarInventarioController(){
           $data = file_get_contents("php://input");
           $request = json_decode($data);
           $request = (array) $request;

@@ -17,7 +17,7 @@
    	  }
 
 
-      public function updateEstadoModel($datosModel , $tabla){
+      static public function updateEstadoModel($datosModel , $tabla){
        
         $sql1 = Conexion::conectar()->prepare("DELETE FROM  conectado WHERE  idAdmin = :idAdmin");
                $sql1->execute( array(
@@ -33,7 +33,7 @@
 
       }
 
-      public function usuarioEstadoModel($datosModel , $tabla){
+      static public function usuarioEstadoModel($datosModel , $tabla){
        
         $sql1 = Conexion::conectar()->prepare("SELECT *  FROM  $tabla WHERE  idAdmin = :idAdmin");
                $sql1->execute( array(
@@ -50,19 +50,16 @@
       }
 
 
-      public function deleteEstadoModel($datosModel , $tabla){
+      static public function deleteEstadoModel($datosModel , $tabla){
        
         $sql1 = Conexion::conectar()->prepare("DELETE  FROM  $tabla WHERE  idAdmin = :idAdmin");
-               $sql1->execute( array(
-            ':idAdmin'=>$datosModel
-            ));
-               $resultado = $sql1->fetch();
-               if ($resultado) {
-              return json_encode( $resultado );
-            }else{
-              return json_encode($resultado);
-            }
-             $sql->close();
+         $sql1->bindParam(':idAdmin', $datosModel);
+
+        if ($sql1->execute()) {
+            return 'success';
+        }
+        $sql1->close();
+           
 
       }
    }

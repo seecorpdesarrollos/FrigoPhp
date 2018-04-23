@@ -4,7 +4,7 @@
 
   class ReportesModel{
 
-     	     public function getMediasModel($idCliente , $table){
+     	     static public function getMediasModel($idCliente , $table){
 
    	   	    $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
               JOIN clientes cli ON cli.idCliente= ta.idCliente
@@ -19,7 +19,7 @@
             $sql->close();
    	   }
 
-   	      public function getMediasFechaModel($fecha1, $fecha2 , $table){
+   	      static public function getMediasFechaModel($fecha1, $fecha2 , $table){
 
    	   	    $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
               JOIN clientes cli ON cli.idCliente= ta.idCliente
@@ -38,7 +38,7 @@
             $sql->close();
    	   }
 
-    public function getTropaModel($nroTropa,  $table){
+    static public function getTropaModel($nroTropa,  $table){
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
               JOIN clientes cli ON cli.idCliente= ta.idCliente

@@ -5,7 +5,7 @@
    require_once '../models/notasModel.php';
    class CuentasController{
   
-    public function getnotasCreditoController(){
+    static public function getnotasCreditoController(){
 			 			  
 			      $respuesta = NotasModel::getNotasCreditoModel('notacredito');
 
@@ -18,7 +18,7 @@
         }
 
 
-        	 public function addNotasCreditoController(){
+        	 static public function addNotasCreditoController(){
 
   	 	   $data = file_get_contents("php://input");
              $request = json_decode($data);
@@ -46,7 +46,7 @@
         }
 
 
-     public function deleteNotasCreditoController(){
+     static public function deleteNotasCreditoController(){
 
   	 	   $data = file_get_contents("php://input");
              $request = json_decode($data);
@@ -77,7 +77,7 @@
         // notas de debito
         // =====================================================================
      
-          public function getnotasDebitoController(){
+          static public function getnotasDebitoController(){
 			 			  
 			      $respuesta = NotasModel::getNotasDebitoModel('notadebito');
 
@@ -91,7 +91,7 @@
 
 
 
-     	 public function addNotasDebitoController(){
+     	 static public function addNotasDebitoController(){
 
   	 	   $data = file_get_contents("php://input");
              $request = json_decode($data);
@@ -122,7 +122,7 @@
  
 
 
-     	 public function addNotasDebitoSinChequeController(){
+     	 static public function addNotasDebitoSinChequeController(){
 
   	 	   $data = file_get_contents("php://input");
              $request = json_decode($data);

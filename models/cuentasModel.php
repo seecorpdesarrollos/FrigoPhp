@@ -4,7 +4,7 @@
 
   class CuentasModel{
 
-  	     public function getCuentasModel($table){
+  	     static public function getCuentasModel($table){
 
    	   	    $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
               JOIN clientes cli ON cli.idCliente= ta.idCliente
@@ -19,7 +19,7 @@
    	   }
 
               
-         public function getCuentasModelId($idCliente, $table){
+         static public function getCuentasModelId($idCliente, $table){
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
               JOIN clientes cli ON cli.idCliente= ta.idCliente
               -- JOIN vendedores ve ON ta.idVendedor= ve.idVendedor 
@@ -31,7 +31,7 @@
             }
             $sql->close();
        }
-         public function getPagosModel($table){
+         static public function getPagosModel($table){
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
               JOIN clientes cli ON cli.idCliente= ta.idCliente
@@ -47,7 +47,7 @@
        }
 
 
-         public function getDetallesFacturaModel($idCliente, $fechaInicial, $fechaFinal, $table){
+         static public function getDetallesFacturaModel($idCliente, $fechaInicial, $fechaFinal, $table){
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
              JOIN facturado det ON ta.nroFactura= det.nroFactura
@@ -67,7 +67,7 @@
        }
 
 
-         public function getTotalKilosModel($idCliente, $fechaInicial, $fechaFinal, $table){
+         static public function getTotalKilosModel($idCliente, $fechaInicial, $fechaFinal, $table){
 
             $sql = Conexion::conectar()->prepare("SELECT SUM(kilo) AS totalKilos FROM $table ta 
               WHERE ta.idCliente = :idCliente AND ta.fecha  BETWEEN :fechaInicial AND :fechaFinal");
@@ -88,7 +88,7 @@
 
 
 
-         public function getEntradaModelId($idCliente, $table){
+         static public function getEntradaModelId($idCliente, $table){
 
             $sql = Conexion::conectar()->prepare("SELECT SUM(entrada) AS totalEntrada  FROM $table  WHERE idCliente = :idCliente");
 
@@ -103,7 +103,7 @@
 
 
 
-         public function getSalidaModelId($idCliente, $table){
+         static public function getSalidaModelId($idCliente, $table){
 
             $sql = Conexion::conectar()->prepare("SELECT SUM(pagos) AS totalSalida  FROM $table  WHERE idCliente = :idCliente");
 
@@ -115,7 +115,7 @@
             }
             $sql->close();
        }
-         public function getTodoModelId($idCliente, $fechaInicial, $fechaFinal,  $table){
+         static public function getTodoModelId($idCliente, $fechaInicial, $fechaFinal,  $table){
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
              -- LEFT JOIN detalles de ON de.nroFactura=ta.nroFactura
@@ -138,7 +138,7 @@
        }
 
 
-       public function addCuentasModel($idCliente,
+       static public function addCuentasModel($idCliente,
               $comprobante,
               $monto,
               $efectivo,
@@ -209,7 +209,7 @@
     }
 
 
-      public function addCuentasModels($idCliente,
+      static public function addCuentasModels($idCliente,
               $comprobante,
               $monto,
               $efectivo,
@@ -273,7 +273,7 @@
        // panel principal
        // 
            
-       public function getInventarioTropaModel($table){
+       static public function getInventarioTropaModel($table){
 
             $sql = Conexion::conectar()->prepare("SELECT nroTropa , estado,  COUNT(*) as total from inventario WHERE  estado = 'cuarteo'  GROUP BY nroTropa");
 
@@ -285,7 +285,7 @@
             $sql->close();
        }
 
-          public function getInventarioTropaDisponibleModel($table){
+          static public function getInventarioTropaDisponibleModel($table){
 
             $sql = Conexion::conectar()->prepare("SELECT nroTropa , estado,  COUNT(*) as total from inventario WHERE  estado = 'Disponible'  GROUP BY nroTropa");
 
@@ -298,7 +298,7 @@
        }
 
 
-        public function getInventarioTropaVendidoModel($table){
+        static public function getInventarioTropaVendidoModel($table){
 
             $sql = Conexion::conectar()->prepare("SELECT nroTropa , estado,  COUNT(*) as total from inventario WHERE  estado = 'Vendida'  GROUP BY nroTropa");
 
@@ -310,7 +310,7 @@
             $sql->close();
        }
 
-        public function getCantModel($table){
+        static public function getCantModel($table){
 
             $sql = Conexion::conectar()->prepare("SELECT nroTropa , cantMedia  From $table order by nroTropa asc");
 

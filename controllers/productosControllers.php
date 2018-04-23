@@ -5,7 +5,7 @@
    require_once '../models/productosModel.php';
    class AgregarProductos{
 
-   	  	public function getProductosController(){
+   	  	static public function getProductosController(){
  			  
       $respuesta = AgregarProductosModel::getProductosModel('productos');
 
@@ -19,7 +19,7 @@
 
 
 
-   	  public function  AgregarProductosController(){
+   	  static public function  AgregarProductosController(){
              
 
               $data = file_get_contents("php://input");
@@ -52,7 +52,7 @@
    	   }
 
 
-        public function  editarProductosController(){
+        static public function  editarProductosController(){
              
             $data = file_get_contents("php://input");
             $request = json_decode($data);
@@ -85,7 +85,7 @@
 
        }
   
-        public function deleteProductosController(){
+        static public function deleteProductosController(){
        	  $data = file_get_contents("php://input");
     		  $request = json_decode($data);
     		  $request = (array) $request;
@@ -103,7 +103,7 @@
          			 }
         }
 
-      public function getProductosControllerId(){
+      static public function getProductosControllerId(){
             $data = file_get_contents("php://input");
             $request = json_decode($data);
             $request = (array) $request;

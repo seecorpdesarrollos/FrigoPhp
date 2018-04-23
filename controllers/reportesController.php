@@ -7,7 +7,7 @@
    class ReportesController{
 
     
-     public function getMediasController(){
+     static public function getMediasController(){
      	 $data = file_get_contents("php://input");
              $request = json_decode($data);
              $request = (array) $request;
@@ -26,7 +26,7 @@
      }
 
 
-      public function getMediasFechaController(){
+      static public function getMediasFechaController(){
      	 $data = file_get_contents("php://input");
              $request = json_decode($data);
              $request = (array) $request;
@@ -45,7 +45,7 @@
 			       }
      }
 
-       public function getTropaController(){
+       static public function getTropaController(){
        $data = file_get_contents("php://input");
              $request = json_decode($data);
              $request = (array) $request;

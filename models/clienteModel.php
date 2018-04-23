@@ -4,7 +4,7 @@
 
   class ClientesModel{
 
-  	     public function getClientesModel($table){
+  	     static public function getClientesModel($table){
 
    	   	    $sql = Conexion::conectar()->prepare("SELECT * FROM $table WHERE estadoCliente = 1  ORDER BY idCliente ASC");
 
@@ -17,7 +17,7 @@
             $sql->close();
    	   }
 
-       public function getClientesTodosModel($table){
+       static public function getClientesTodosModel($table){
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table   ORDER BY idCliente ASC");
 
@@ -29,7 +29,7 @@
             }
             $sql->close();
        }
-               public function getClientesInactivosModel($table){
+               static public function getClientesInactivosModel($table){
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table WHERE estadoCliente = 0  ORDER BY idCliente ASC");
 
@@ -43,7 +43,7 @@
        }
 
 
-         public function getInventarioTotalModel($nroTropa , $table){
+         static public function getInventarioTotalModel($nroTropa , $table){
 
 
             $sql = Conexion::conectar()->prepare("SELECT sum(kiloMedia) as total FROM $table  WHERE nroTropa=:nroTropa ");
@@ -57,7 +57,7 @@
             $sql->close();
        }
 
-          public function getClienteFacturadoIdModel($idCliente, $table){
+          static public function getClienteFacturadoIdModel($idCliente, $table){
 
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta
@@ -67,7 +67,7 @@
             if ($sql->execute( array(':idCliente'=>$idCliente))) {
              $res= $sql->fetchAll();
             }
-             if(empty(($res))){
+             if(empty($res)){
               return 'error';
              }else{
               return $res;
@@ -75,14 +75,14 @@
             $sql->close();
        }
 
-        public function getSaldoIdModel($idCliente, $table){
+        static public function getSaldoIdModel($idCliente, $table){
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table WHERE idCliente = :idCliente");
 
             if ($sql->execute( array(':idCliente'=>$idCliente))) {
              $res= $sql->fetch();
             }
-             if(empty(($res))){
+             if(empty($res)){
               return 'nada';
              }else{
               return $res;
@@ -94,7 +94,7 @@
 
 
 
-         public static function bajaClientesModel($datosModel, $tabla)
+         static public  function bajaClientesModel($datosModel, $tabla)
     {
 
         $sql = Conexion::conectar()->prepare("UPDATE $tabla SET estadoCliente = 0  WHERE idCliente = :idCliente");
@@ -106,7 +106,7 @@
         $sql->close();
     }
 
-             public static function altaClientesModel($datosModel, $tabla)
+             static public  function altaClientesModel($datosModel, $tabla)
     {
 
         $sql = Conexion::conectar()->prepare("UPDATE $tabla SET estadoCliente = 1  WHERE idCliente = :idCliente");
@@ -118,7 +118,7 @@
         $sql->close();
     }
 
-              public static function addDeudasModel($idCliente, $montoDeuda, $idVendedor ,$tabla)
+              static public  function addDeudasModel($idCliente, $montoDeuda, $idVendedor ,$tabla)
     {
 // genera el pago al cliente.
         $sql = Conexion::conectar()->prepare("INSERT INTO $tabla(idCliente, montoDeuda, idVendedor) 
@@ -138,7 +138,7 @@
 
   
 
-             static public function addClienteModel($nombreCliente,$telefonoCliente,$direccionCliente, $tabla){
+             static  public function addClienteModel($nombreCliente,$telefonoCliente,$direccionCliente, $tabla){
 
                $sql = Conexion::conectar()->prepare("INSERT INTO $tabla
                 (nombreCliente,telefonoCliente,direccionCliente)
@@ -168,7 +168,7 @@
          }
 
 
-         public function getClienteIdModel($idCliente, $table){
+         static public function getClienteIdModel($idCliente, $table){
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table WHERE idCliente = :idCliente");
 
@@ -184,7 +184,7 @@
 
 
 
-          public function editarClientesModel($nombreCliente,$telefonoCliente,$direccionCliente ,
+          static public function editarClientesModel($nombreCliente,$telefonoCliente,$direccionCliente ,
             $idCliente, $tabla){
 
                $sql = Conexion::conectar()->prepare("UPDATE  $tabla SET 
@@ -205,7 +205,7 @@
 
          }
 
-      public function comprobarVendedorModel($nombreVendedor , $table){
+      static public function comprobarVendedorModel($nombreVendedor , $table){
 
   $sql = Conexion::conectar()->prepare("SELECT * FROM $table 
               WHERE nombreVendedor = :nombreVendedor");

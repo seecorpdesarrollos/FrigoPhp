@@ -1,11 +1,11 @@
 <?php 
-    header("Access-Control-Allow-Origin: *");
+     header("Access-Control-Allow-Origin: *");
      header("Access-Control-Allow-Headers:Origin, X-Requested-Withd, Content-Type, Accept");
 
   require_once '../models/loginModel.php';
   class UsuarioController{
 
-      public function getUsuarioController(){
+      public static function getUsuarioController(){
 
   
       $data = file_get_contents("php://input");
@@ -28,7 +28,7 @@
 
     
 
-      public function updateEstadoController(){
+      public static function updateEstadoController(){
 
       $data = file_get_contents("php://input");
       $request = json_decode($data);
@@ -43,7 +43,7 @@
       }
 
 
-      public function usuarioEstadoController(){
+      public static function usuarioEstadoController(){
 
       $data = file_get_contents("php://input");
       $request = json_decode($data);
@@ -58,7 +58,7 @@
         echo $respuesta ;
       }
 
-       public function deleteEstadoController(){
+       public static function deleteEstadoController(){
 
       $data = file_get_contents("php://input");
       $request = json_decode($data);
@@ -70,7 +70,13 @@
        
           $respuesta = UsuarioModel::deleteEstadoModel($idAdmin , 'admin');
         
-        echo $respuesta ;
+
+         if ($respuesta == 'success') {
+           
+          echo json_encode($respuesta);
+         }else{
+            echo json_encode($respuesta);
+         }
       }
 
   }

@@ -4,7 +4,7 @@
 
   class InventarioModel{
 
-  	     public function getInventarioModel($table){
+  	     static public function getInventarioModel($table){
 
 
    	   	    $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
@@ -19,7 +19,7 @@
             $sql->close();
    	   }
 
-             public function getInventariototalesModel($table){
+             static public function getInventariototalesModel($table){
 
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
@@ -34,7 +34,7 @@
             $sql->close();
        }
 
-                   public function getCuarteoModel($table){
+                   static public function getCuarteoModel($table){
 
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
@@ -49,7 +49,7 @@
             $sql->close();
        }
 
-     public function getFacturasModel($table){
+     static public function getFacturasModel($table){
 
 
             $sql = Conexion::conectar()->prepare("SELECT MAX(idFactura) AS total FROM $table ");
@@ -63,7 +63,7 @@
             $sql->close();
        }
 
-          public function getDetallesModel($table){
+          static public function getDetallesModel($table){
 
 
             $sql = Conexion::conectar()->prepare("SELECT  *  FROM $table de  
@@ -81,7 +81,7 @@
             $sql->close();
        }
 
-          public function getTemporalModel($table){
+          static public function getTemporalModel($table){
 
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table  ");
@@ -96,7 +96,7 @@
        }
 
 
-          public function getTemporal1Model($table){
+          static public function getTemporal1Model($table){
 
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table  ");
@@ -110,7 +110,7 @@
             $sql->close();
        }
 
-         public function getCuarteoInventarioModel($table){
+         static public function getCuarteoInventarioModel($table){
 
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
@@ -126,7 +126,7 @@
        }
 
 
-         public function getInventarioTotalModel($nroTropa , $table){
+         static public function getInventarioTotalModel($nroTropa , $table){
 
 
             $sql = Conexion::conectar()->prepare("SELECT sum(kiloMedia) as total FROM $table  WHERE nroTropa=:nroTropa ");
@@ -140,7 +140,7 @@
             $sql->close();
        }
 
-          public function getInventarioTropaModel($nroTropa, $table){
+          static public function getInventarioTropaModel($nroTropa, $table){
 
 
             $sql = Conexion::conectar()->prepare("SELECT *   FROM $table ta 
@@ -157,7 +157,7 @@
        }
 
 
-          public function getDetallesFacturasModel($nroFactura, $table){
+          static public function getDetallesFacturasModel($nroFactura, $table){
 
 
             $sql = Conexion::conectar()->prepare("SELECT *   FROM $table ta 
@@ -174,7 +174,7 @@
        }
 
 
-          public function masInfoCuarteoModel($idCuarteoInventario, $table){
+          static public function masInfoCuarteoModel($idCuarteoInventario, $table){
 
 
             $sql = Conexion::conectar()->prepare("SELECT *   FROM $table ta 
@@ -192,7 +192,7 @@
        }
 
 
-      public function getInventarioIdModel($idInventario, $table){
+      static public function getInventarioIdModel($idInventario, $table){
 
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table
@@ -208,7 +208,7 @@
        }
 
 
-         public static function deleteProductosModel($datosModel, $tabla)
+         static public  function deleteProductosModel($datosModel, $tabla)
     {
 
         $sql = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE idProductos = :idProductos");
@@ -221,7 +221,7 @@
     }
 
 
-         public static function deleteCuarteoModel($idInventario, $tabla)
+         static public  function deleteCuarteoModel($idInventario, $tabla)
     {
 
         $sql = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE idInventario = :idInventario");
@@ -238,7 +238,7 @@
     }
 // realizamos una venta a un cliente en particular.
 
-            public static function ventasModel($idCliente, $nroFactura, $total, $idAdmin)
+            static public  function ventasModel($idCliente, $nroFactura, $total, $idAdmin)
     {
   // insertamos el número de factura.
            $sql7 = Conexion::conectar()->prepare("INSERT INTO facturas(estado)VALUES(estado = 1)");
@@ -322,7 +322,7 @@
     }
 
 
-         public static function deleteCuarteoIdModel($idCuarteo, $tabla)
+         static public  function deleteCuarteoIdModel($idCuarteo, $tabla)
     {
 
         $sql = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE idCuarteo = :idCuarteo");
@@ -339,7 +339,7 @@
     }
 
 
-         public static function borrarTempModel($idTemp,$descripcion, $peso, $id , $tabla)
+         static public  function borrarTempModel($idTemp,$descripcion, $peso, $id , $tabla)
     {
 
         $sql = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE idTemp = :idTemp");
@@ -355,7 +355,7 @@
         $sql->close();
     }
 
-         public static function borrarTemp1Model($idInventario , $tabla)
+         static public  function borrarTemp1Model($idInventario , $tabla)
     {
 
         $sql = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE idInventario = :idInventario");
@@ -371,7 +371,7 @@
         $sql->close();
     }
 
-              public function getProductosModelId($datosModel , $table){
+              static public function getProductosModelId($datosModel , $table){
 
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table WHERE idProductos = :idProductos");
@@ -388,7 +388,7 @@
 
 
 
-             public function addInventarioModel($kiloMedia,$nroTropa, $tabla){
+             static public function addInventarioModel($kiloMedia,$nroTropa, $tabla){
               $sql1 = Conexion::conectar()->prepare("SELECT cantMedia FROM productos WHERE nroTropa = :nroTropa");
             if ($sql1->execute(array(':nroTropa'=>$nroTropa))) {
               $res= $sql1->fetch();
@@ -417,7 +417,7 @@
 
 }
 
-             public function temporalModel($pesoCuarto,
+             static public function temporalModel($pesoCuarto,
             $descripcion,$precio, $facturaNro, $idCuarto, $tabla){
 
                $sql = Conexion::conectar()->prepare("INSERT INTO $tabla
@@ -440,7 +440,7 @@
             }
 
 
-   public function temporal1Model($medias,$nroTropa,
+   static public function temporal1Model($medias,$nroTropa,
            $precio, $facturaNro, $idInventario, $tabla){
 
                $sql = Conexion::conectar()->prepare("INSERT INTO $tabla
@@ -462,7 +462,7 @@
               }
             }
 
-            public function getTotalTempModel($tabla){
+            static public function getTotalTempModel($tabla){
                
                 $sql = Conexion::conectar()->prepare("SELECT *, SUM(kilomedia * preciomedia) AS total FROM $tabla");
 
@@ -474,7 +474,7 @@
             }
             $sql->close();
             }
-                       public function getTotalTemp1Model($tabla){
+                       static public function getTotalTemp1Model($tabla){
                
                 $sql = Conexion::conectar()->prepare("SELECT *, SUM(kilo * precio) AS total FROM $tabla");
 
@@ -487,7 +487,7 @@
             $sql->close();
             }
 
-                 public function addCuarteoModel($kiloMedia,$nroTropa,$idInventario, $tabla){
+                 static public function addCuarteoModel($kiloMedia,$nroTropa,$idInventario, $tabla){
 
                $sql = Conexion::conectar()->prepare("INSERT INTO $tabla
                 (kiloMedia,nroTropa, idInventario)
@@ -508,7 +508,7 @@
 
          }
 
-           public function addInventarioCuarteoModel(
+           static public function addInventarioCuarteoModel(
                                                        $pecho, 
                                                        $mocho, 
                                                        $parrillero,
@@ -570,7 +570,7 @@
 
          }
 
-          public function editarInventarioModel($kiloMedia,$nroTropa, $idInventario, $tabla){
+          static public function editarInventarioModel($kiloMedia,$nroTropa, $idInventario, $tabla){
 
                $sql = Conexion::conectar()->prepare("UPDATE  $tabla SET 
                 kiloMedia = :kiloMedia , nroTropa= :nroTropa WHERE idInventario=:idInventario");
@@ -586,7 +586,7 @@
 
          }
 
-       public function comprobarInventarioModel($datosModel , $table){
+       static public function comprobarInventarioModel($datosModel , $table){
 
 
             $sql = Conexion::conectar()->prepare("SELECT * FROM $table 
@@ -602,7 +602,7 @@
             $sql->close();
        }
 
-        public function editarProductosModel($dueHacienda,
+        static public function editarProductosModel($dueHacienda,
                                              $cantCabeza,
                                              $cantMedia,
                                              $fechaFaena,

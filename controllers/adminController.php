@@ -7,22 +7,22 @@
    class AdminController{
 
 
-   	   public function getAdminController(){
+   	   static public function getAdminController(){
    	   	 $respuesta = AdminModel::getAdminModel( 'admin');
    	   	  echo json_encode( $respuesta );
    	   }
 
 
-       public function getAdminControllerActivo(){
+        static public function getAdminControllerActivo(){
          $respuesta = AdminModel::getAdminModelActivo( 'conectado');
          return $respuesta;
        }
-        public function getAdminControllerUsuario(){
+         static public function getAdminControllerUsuario(){
          $respuesta = AdminModel::getAdminModelUsuario('conectado');
          return $respuesta;
        }
 
-      public function updateUsuarioController(){
+       static public function updateUsuarioController(){
             
 
           $data = file_get_contents("php://input");
@@ -46,7 +46,7 @@
          
       }
 
-   public function addUsuarioController(){
+    static public function addUsuarioController(){
           $data = file_get_contents("php://input");
           $request = json_decode($data);
           $request = (array) $request;
