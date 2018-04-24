@@ -47,9 +47,13 @@
               ");
 
             if ($sql->execute(array( ':nroTropa'=>$nroTropa  ))) {
-              return $sql->fetchAll();
-            }else{
-              return 'error';
+              $res= $sql->fetchAll();
+              if ($res) {
+                return $res;   
+              }
+            else{
+              return 'nada';
+            }
             }
             $sql->close();
        }
