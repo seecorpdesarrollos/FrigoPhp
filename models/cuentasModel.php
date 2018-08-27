@@ -146,12 +146,14 @@
               $nroCheque,
               $banco,
               $propietario,
-              $idVendedor , $tabla){
+              $idVendedor ,
+              $fechaCobro,
+              $tabla){
 
 
 
-            $sql = Conexion::conectar()->prepare("INSERT INTO $tabla(idCliente, comprobante, monto, efectivo, cheque, nroCheque, banco,propietario, idVendedor)
-              VALUES(:idCliente,:comprobante, :monto , :efectivo,:cheque,:nroCheque, :banco, :propietario,:idVendedor)");
+            $sql = Conexion::conectar()->prepare("INSERT INTO $tabla(idCliente, comprobante, monto, efectivo, cheque, nroCheque, banco,propietario,fechaPago, idVendedor)
+              VALUES(:idCliente,:comprobante, :monto , :efectivo,:cheque,:nroCheque, :banco, :propietario,:fechaPago , :idVendedor)");
               $sql->bindParam(':idCliente', $idCliente);
               $sql->bindParam(':comprobante', $comprobante);
               $sql->bindParam(':monto', $monto);
@@ -161,6 +163,7 @@
               $sql->bindParam(':banco', $banco);
               $sql->bindParam(':propietario', $propietario);
               $sql->bindParam(':idVendedor', $idVendedor);
+              $sql->bindParam(':fechaPago', $fechaCobro);
               // $ven=1; // vendedor
               if ($sql->execute()) {
 
@@ -175,7 +178,7 @@
             $sql41 = Conexion::conectar()->prepare("INSERT INTO cuentacorriente(comprobante,
              pagos,  idCliente, fecha, idVendedor)
               VALUES(:comprobante, :pagos , :idCliente,:fecha,:idVendedor)");
-              $hoy = date('y-m-d');
+              $hoy = $fechaCobro;
               $sql41->bindParam(':comprobante', $comprobante);
               $sql41->bindParam(':pagos', $monto);
               $sql41->bindParam(':idCliente', $idCliente);
@@ -202,73 +205,14 @@
 
                 return 'success';
               }else{
-              return 'errorers';
+              return 'errores';
             }
                $sql->close();
 
     }
 
 
-      static public function addCuentasModels($idCliente,
-              $comprobante,
-              $monto,
-              $efectivo,
-              $cheque,
-              $nroCheque,
-              $banco,
-              $propietario, $tabla){
 
-
-            $sql = Conexion::conectar()->prepare("INSERT INTO $tabla(idCliente, comprobante, monto, efectivo, cheque, nroCheque, banco,propietario)
-              VALUES(:idCliente,:comprobante, :monto , :efectivo,:cheque,:nroCheque, :banco, :propietario)");
-              $sql->bindParam(':idCliente', $idCliente);
-              $sql->bindParam(':comprobante', $comprobante);
-              $sql->bindParam(':monto', $monto);
-              $sql->bindParam(':efectivo', $efectivo);
-              $sql->bindParam(':cheque', $cheque);
-              $sql->bindParam(':nroCheque', $nroCheque);
-              $sql->bindParam(':banco', $banco);
-              $sql->bindParam(':propietario', $propietario);
-
-              if ($sql->execute()) {
-
-               $sql571 = Conexion::conectar()->prepare("INSERT INTO cuentacorriente(comprobante,pagos,idCliente, fecha)
-                    VALUES(:nroFactura,:pagos,:idCliente,:fecha)");
-               $hoy = date('y-m-d');
-
-                   $sql571->bindParam(':nroFactura', $comprobante);
-                   $sql571->bindParam(':pagos', $monto);
-                   $sql571->bindParam(':idCliente', $idCliente);
-                   $sql571->bindParam(':fecha', $hoy);
-                   $sql571->execute();
-
-
-               $sql3 = Conexion::conectar()->prepare("UPDATE  saldos SET  saldoActual= saldoActual - $monto , saldoFinal = saldoFinal - $monto WHERE idCliente = :idCliente");
-               $sql3->bindParam(':idCliente', $idCliente);
-                $sql3->execute();
-
-
-                 $sql13 = Conexion::conectar()->prepare("SELECT MAX(idCuentaCorriente)AS id FROM cuentacorriente
-                  WHERE idCliente = :idCliente");
-               $sql13->bindParam(':idCliente', $idCliente);
-               $sql13->execute();
-                $resu= $sql13->fetch();
-                 $id =  $resu['id'];
-
-               $sql11 = Conexion::conectar()->prepare("UPDATE cuentacorriente
-                SET saldo= (SELECT saldoActual FROM saldos WHERE idCliente=$idCliente)  WHERE idCliente=:idCliente AND idCuentaCorriente = :id " );
-              $sql11->bindParam(':idCliente', $idCliente);
-              $sql11->bindParam(':id', $id);
-
-              $sql11->execute();
-
-
-                return 'success';
-              }else{
-              return 'errorers';
-            }
-               $sql->close();
-    }
 
        // panel principal
        //

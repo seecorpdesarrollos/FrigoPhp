@@ -1,18 +1,18 @@
-<?php 
-  
+<?php
+
      header("Access-Control-Allow-Origin: *");
      header("Access-Control-Allow-Headers:Origin, X-Requested-Withd, Content-Type, Accept");
    require_once '../models/cuentasModel.php';
    class CuentasController{
-  
+
     static public function getPagosController(){
-			 			  
+
 			      $respuesta = CuentasModel::getPagosModel('pagos');
 
 			       if ($respuesta) {
-			        
+
 			          echo json_encode($respuesta);
-			       
+
 			       }
 
         }
@@ -20,13 +20,13 @@
 
 
          	 static public function getCuentasController(){
-			 			  
+
 			      $respuesta = CuentasModel::getCuentasModel('saldos');
 
 			       if ($respuesta) {
-			        
+
 			          echo json_encode($respuesta);
-			       
+
 			       }
 
         }
@@ -37,17 +37,17 @@
   	 	   $data = file_get_contents("php://input");
              $request = json_decode($data);
              $request = (array) $request;
-                
-            
+
+
               $idCliente =$request['idCliente'];
               // $idCliente =1;
-			 			  
+
 			      $respuesta = CuentasModel::getCuentasModelId($idCliente,'saldos');
 
 			       if ($respuesta) {
-			        
+
 			          echo json_encode($respuesta);
-			       
+
 			       }
 
         }
@@ -58,30 +58,30 @@
          $data = file_get_contents("php://input");
              $request = json_decode($data);
              $request = (array) $request;
-                
-            
+
+
               $idCliente =$request['idCliente'];
               $fechaInicial =$request['fechaInicial'];
               $fechaFinal =$request['fechaFinal'];
                 if (empty($fechaInicial) && empty($fechaFinal)) {
                 $fechaInicials ='2015-01-01';
                 $fechaFinals ='2100-01-01';
-               
+
                 $respuesta = CuentasModel::getDetallesFacturaModel($idCliente,$fechaInicials, $fechaFinals ,  'detalles');
-                  
+
                     echo json_encode($respuesta);
-                 
-          
+
+
               }else{
-              
-                $respuesta = CuentasModel::getDetallesFacturaModel($idCliente,$fechaInicial, 
+
+                $respuesta = CuentasModel::getDetallesFacturaModel($idCliente,$fechaInicial,
                     $fechaFinal ,  'detalles');
 
                     echo json_encode($respuesta);
-              
-                 
+
+
               }
-              
+
 
         }
 
@@ -91,8 +91,8 @@
          $data = file_get_contents("php://input");
              $request = json_decode($data);
              $request = (array) $request;
-                
-            
+
+
               $idCliente =$request['idCliente'];
               $fechaInicial =$request['fechaInicial'];
               $fechaFinal =$request['fechaFinal'];
@@ -101,20 +101,20 @@
                 $fechaFinals ='2100-01-01';
                 // $idCliente=1;
                 $respuesta = CuentasModel::getTotalKilosModel($idCliente,$fechaInicials, $fechaFinals ,  'detalles');
-                  
+
                     echo json_encode($respuesta);
-                 
-          
+
+
               }else{
-              
-                $respuesta = CuentasModel::getTotalKilosModel($idCliente,$fechaInicial, 
+
+                $respuesta = CuentasModel::getTotalKilosModel($idCliente,$fechaInicial,
                     $fechaFinal ,  'detalles');
 
                     echo json_encode($respuesta);
-              
-                 
+
+
               }
-              
+
 
         }
 
@@ -126,17 +126,17 @@
   	 	   $data = file_get_contents("php://input");
              $request = json_decode($data);
              $request = (array) $request;
-                
-            
+
+
               $idCliente =$request['idCliente'];
               // $idCliente =1;
-			 			  
+
 			      $respuesta = CuentasModel::getEntradaModelId($idCliente,'cuentacorriente');
 
 			       if ($respuesta) {
-			        
+
 			          echo json_encode($respuesta);
-			       
+
 			       }
 
         }
@@ -148,17 +148,17 @@
   	 	   $data = file_get_contents("php://input");
              $request = json_decode($data);
              $request = (array) $request;
-                
-            
+
+
               $idCliente =$request['idCliente'];
               // $idCliente =1;
-			 			  
+
 			      $respuesta = CuentasModel::getSalidaModelId($idCliente,'cuentacorriente');
 
 			       if ($respuesta) {
-			        
+
 			          echo json_encode($respuesta);
-			       
+
 			       }
 
         }
@@ -168,8 +168,8 @@
   	 	   $data = file_get_contents("php://input");
              $request = json_decode($data);
              $request = (array) $request;
-                
-            
+
+
               $idCliente =$request['idCliente'];
               $fechaInicial =$request['fechaInicial'];
               $fechaFinal =$request['fechaFinal'];
@@ -181,15 +181,15 @@
 			      	'cuentacorriente');
               	echo json_encode($respuesta);
               }else{
-			 			  
+
 			      $respuesta = CuentasModel::getTodoModelId($idCliente, $fechaInicial, $fechaFinal,
 			      	'cuentacorriente');
               	echo json_encode($respuesta);
-			      
-              	 
+
+
               }
 
-			      
+
 
         }
 
@@ -200,7 +200,7 @@
   	 	   $data = file_get_contents("php://input");
              $request = json_decode($data);
              $request = (array) $request;
-               
+
               $idCliente =$request['idCliente'];
               $comprobante =$request['comprobante'];
               $monto =$request['monto'];
@@ -210,8 +210,9 @@
               $banco =$request['banco'];
               $propietario =$request['propietario'];
               $idVendedor =$request['idVendedor'];
+              $fechaCobro =$request['fechaCobro'];
               // $idCliente =1;
-			 			  
+
 			      $respuesta = CuentasModel::addCuentasModel(
 			      	$idCliente,
 			      	$comprobante,
@@ -221,52 +222,20 @@
 			      	$nroCheque,
 			      	$banco,
 			      	$propietario,
-                $idVendedor,
+              $idVendedor,
+              $fechaCobro,
 			      	'pagos');
 
 			       if ($respuesta) {
-			        
+
 			          echo json_encode($respuesta);
-			       
+
 			       }
 
         }
 
 
-         static public function addCuentasControllers(){
 
-  	 	   $data = file_get_contents("php://input");
-             $request = json_decode($data);
-             $request = (array) $request;
-               
-              $idCliente =$request['idCliente'];
-              $comprobante =$request['comprobante'];
-              $monto =$request['monto'];
-              $efectivo =$request['efectivo'];
-              $cheque =$request['cheque'];
-              $nroCheque =$request['nroCheque'];
-              $banco =$request['banco'];
-              $propietario =$request['propietario'];
-              // $idCliente =1;
-			 			  
-			      $respuesta = CuentasModel::addCuentasModels(
-			      	$idCliente,
-			      	$comprobante,
-			      	$monto,
-			      	$efectivo,
-			      	$cheque,
-			      	$nroCheque,
-			      	$banco,
-			      	$propietario,
-			      	'pagos');
-
-			       if ($respuesta) {
-			        
-			          echo json_encode($respuesta);
-			       
-			       }
-
-        }
 
 
         // principal panel
@@ -278,9 +247,9 @@
           $respuesta = CuentasModel::getInventarioTropaModel('inventario');
 
              if ($respuesta) {
-              
+
                 echo json_encode($respuesta);
-             
+
              }
      }
 
@@ -289,9 +258,9 @@
           $respuesta = CuentasModel::getInventarioTropaDisponibleModel('inventario');
 
              if ($respuesta) {
-              
+
                 echo json_encode($respuesta);
-             
+
              }
      }
 
@@ -301,9 +270,9 @@
           $respuesta = CuentasModel::getInventarioTropaVendidoModel('inventario');
 
              if ($respuesta) {
-              
+
                 echo json_encode($respuesta);
-             
+
              }
      }
 
@@ -313,9 +282,9 @@
           $respuesta = CuentasModel::getCantModel('productos');
 
              if ($respuesta) {
-              
+
                 echo json_encode($respuesta);
-             
+
              }
      }
 
@@ -327,28 +296,28 @@
     if(isset($_GET['id'])){
       if ($_GET['id'] == "getSaldos") {
         $delete = new CuentasController;
-        $delete->getCuentasController();  
+        $delete->getCuentasController();
       }
    }
 
    if(isset($_GET['id'])){
       if ($_GET['id'] == "getDetallesFac") {
         $delete = new CuentasController;
-        $delete->getDetallesFacturaController();  
+        $delete->getDetallesFacturaController();
       }
    }
 
  if(isset($_GET['id'])){
       if ($_GET['id'] == "totalKilos") {
         $delete = new CuentasController;
-        $delete->gettotalKilosController();  
+        $delete->gettotalKilosController();
       }
    }
 
    if(isset($_GET['id'])){
       if ($_GET['id'] == "totalEntradaId") {
         $delete = new CuentasController;
-        $delete->getEntradaControllerId();  
+        $delete->getEntradaControllerId();
       }
    }
 
@@ -356,7 +325,7 @@
    if(isset($_GET['id'])){
       if ($_GET['id'] == "totalSalidaId") {
         $delete = new CuentasController;
-        $delete->getSalidaControllerId();  
+        $delete->getSalidaControllerId();
       }
    }
 
@@ -365,7 +334,7 @@
     if(isset($_GET['id'])){
       if ($_GET['id'] == "todo") {
         $delete = new CuentasController;
-        $delete->getTodoController();  
+        $delete->getTodoController();
       }
    }
 
@@ -373,39 +342,34 @@
    if(isset($_GET['id'])){
       if ($_GET['id'] == "getPagos") {
         $delete = new CuentasController;
-        $delete->getPagosController();  
+        $delete->getPagosController();
       }
    }
 
        if(isset($_GET['id'])){
       if ($_GET['id'] == "getSaldosId") {
         $delete = new CuentasController;
-        $delete->getCuentasControllerId();  
+        $delete->getCuentasControllerId();
       }
    }
 
        if(isset($_GET['id'])){
       if ($_GET['id'] == "addPagos") {
         $delete = new CuentasController;
-        $delete->addCuentasController();  
+        $delete->addCuentasController();
       }
    }
 
-         if(isset($_GET['id'])){
-      if ($_GET['id'] == "addPagoss") {
-        $delete = new CuentasController;
-        $delete->addCuentasControllers();  
-      }
-   }
+  
 
 
    // panel principal
-   // 
-   
+   //
+
     if(isset($_GET['id'])){
       if ($_GET['id'] == "getInventarioTropa") {
         $delete = new CuentasController;
-        $delete->getInventarioTropaController();  
+        $delete->getInventarioTropaController();
       }
    }
 
@@ -413,14 +377,14 @@
     if(isset($_GET['id'])){
       if ($_GET['id'] == "getInventarioTropaDisponible") {
         $delete = new CuentasController;
-        $delete->getInventarioTropaDisponibleController();  
+        $delete->getInventarioTropaDisponibleController();
       }
    }
 
       if(isset($_GET['id'])){
       if ($_GET['id'] == "getInventarioTropaVendido") {
         $delete = new CuentasController;
-        $delete->getInventarioTropaVendidoController();  
+        $delete->getInventarioTropaVendidoController();
       }
    }
 
@@ -428,6 +392,6 @@
       if(isset($_GET['id'])){
       if ($_GET['id'] == "getCant") {
         $delete = new CuentasController;
-        $delete->getCantController();  
+        $delete->getCantController();
       }
    }
