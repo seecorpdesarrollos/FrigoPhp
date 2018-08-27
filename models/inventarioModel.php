@@ -1,4 +1,4 @@
-<?php 
+<?php
 
   require_once 'conexion.php';
 
@@ -7,7 +7,7 @@
   	     static public function getInventarioModel($table){
 
 
-   	   	    $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
+   	   	    $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta
               JOIN productos pro ON ta.nroTropa = pro.nroTropa WHERE cantidad =1 ORDER BY idInventario DESC");
 
    	   	    if ($sql->execute()) {
@@ -22,7 +22,7 @@
              static public function getInventariototalesModel($table){
 
 
-            $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
+            $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta
               JOIN productos pro ON ta.nroTropa = pro.nroTropa   ORDER BY idInventario DESC");
 
             if ($sql->execute()) {
@@ -37,7 +37,7 @@
                    static public function getCuarteoModel($table){
 
 
-            $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
+            $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta
               JOIN productos pro ON ta.nroTropa = pro.nroTropa ORDER BY idCuarteo DESC ");
 
             if ($sql->execute()) {
@@ -66,9 +66,9 @@
           static public function getDetallesModel($table){
 
 
-            $sql = Conexion::conectar()->prepare("SELECT  *  FROM $table de  
-              JOIN clientes cli ON cli.idCliente=de.idCliente 
-              -- JOIN detalles det ON de.nroTropa=det.nroTropa 
+            $sql = Conexion::conectar()->prepare("SELECT  *  FROM $table de
+              JOIN clientes cli ON cli.idCliente=de.idCliente
+              -- JOIN detalles det ON de.nroTropa=det.nroTropa
               ORDER BY idFacturado DESC
              ");
 
@@ -113,7 +113,7 @@
          static public function getCuarteoInventarioModel($table){
 
 
-            $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
+            $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta
               JOIN cuarteo pro ON ta.idCuarteo = pro.idCuarteo WHERE cantidad!= 0 ");
 
             if ($sql->execute()) {
@@ -143,7 +143,7 @@
           static public function getInventarioTropaModel($nroTropa, $table){
 
 
-            $sql = Conexion::conectar()->prepare("SELECT *   FROM $table ta 
+            $sql = Conexion::conectar()->prepare("SELECT *   FROM $table ta
               JOIN productos pro ON ta.nroTropa = pro.nroTropa
               WHERE pro.nroTropa=:nroTropa");
 
@@ -160,7 +160,7 @@
           static public function getDetallesFacturasModel($nroFactura, $table){
 
 
-            $sql = Conexion::conectar()->prepare("SELECT *   FROM $table ta 
+            $sql = Conexion::conectar()->prepare("SELECT *   FROM $table ta
               JOIN clientes cli ON ta.idCliente = cli.idCliente
               WHERE ta.nroFactura=:nroFactura ");
 
@@ -177,7 +177,7 @@
           static public function masInfoCuarteoModel($idCuarteoInventario, $table){
 
 
-            $sql = Conexion::conectar()->prepare("SELECT *   FROM $table ta 
+            $sql = Conexion::conectar()->prepare("SELECT *   FROM $table ta
               JOIN cuarteo pro ON ta.idCuarteo = pro.idCuarteo
               JOIN productos a ON a.nroTropa = pro.nroTropa
               WHERE idCuarteoInventario=:idCuarteoInventario");
@@ -228,7 +228,7 @@
         $sql->bindParam(':idInventario', $idInventario);
 
         if ($sql->execute()) {
-           $sql1 = Conexion::conectar()->prepare("UPDATE  inventario SET 
+           $sql1 = Conexion::conectar()->prepare("UPDATE  inventario SET
                   cantidad= 1 , estado= 'Disponible' WHERE idInventario=:idInventario");
                     $sql1->bindParam(':idInventario', $idInventario);
                     $sql1->execute();
@@ -238,11 +238,11 @@
     }
 // realizamos una venta a un cliente en particular.
 
-            static public  function ventasModel($idCliente, $nroFactura, $total, $idAdmin)
+            static public  function ventasModel($idCliente, $nroFactura, $total, $idAdmin, $fechaVenta)
     {
   // insertamos el número de factura.
            $sql7 = Conexion::conectar()->prepare("INSERT INTO facturas(estado)VALUES(estado = 1)");
-                
+
                 if($sql7->execute()){
                   // actualizamos las tablas temporales.
                 $sql = Conexion::conectar()->prepare("UPDATE temp SET idCliente=:idCliente, nroFactura=:nroFactura");
@@ -256,24 +256,24 @@
 
 // insertamos lo de las tablas temporales a las de detalles correspondientes.
             $sql2 = Conexion::conectar()->prepare("INSERT INTO detalles(kilo,descripcion,cantidad,precio,fecha,nroFactura,idCuarteo,idCliente)
-  SELECT tem.kiloMedia,tem.descripcion,tem.cantidad,tem.precioMedia,tem.fechaVenta,tem.nroFactura,tem.id,tem.idCliente FROM temp tem");
-           $sql2->execute();
+  SELECT tem.kiloMedia,tem.descripcion,tem.cantidad,tem.precioMedia,:fechaVenta,tem.nroFactura,tem.id,tem.idCliente FROM temp tem");
+           $sql2->execute(array(':fechaVenta'=>$fechaVenta));
 
 
 
             $sql3 = Conexion::conectar()->prepare("INSERT INTO detalles(kilo,nroTropa, descripcion,cantidad,precio, fecha,nroFactura,idInventario,idCliente)
-  SELECT temm.kilo,temm.nroTropa,temm.descripcionMedia,temm.cantidad,temm.precio,temm.fecha, 
+  SELECT temm.kilo,temm.nroTropa,temm.descripcionMedia,temm.cantidad,temm.precio,:fechaVenta,
   temm.nroFactura,temm.idInventario,temm.idCliente FROM tempmedia temm");
-          $sql3->execute();
+          $sql3->execute(array(':fechaVenta'=>$fechaVenta));
 
 
-     
-         $hoy = date('y-m-d');
+
+           // $hoy = date('y-m-d');
 
             $sql57 = Conexion::conectar()->prepare("INSERT INTO facturado(nroFactura,fecha, idCliente, totalVenta, idAdmin)
               VALUES(:nroFactura,:fecha,:idCliente,:totalVenta,:idAdmin)");
               $sql57->bindParam(':nroFactura', $nroFactura);
-              $sql57->bindParam(':fecha', $hoy);
+              $sql57->bindParam(':fecha', $fechaVenta);
              $sql57->bindParam(':idCliente', $idCliente);
              $sql57->bindParam(':totalVenta', $total);
              $sql57->bindParam(':idAdmin', $idAdmin);
@@ -285,28 +285,28 @@
               $sql571->bindParam(':comprobante', $fa);
              $sql571->bindParam(':totalVenta', $total);
              $sql571->bindParam(':idCliente', $idCliente);
-             $sql571->bindParam(':fecha', $hoy);
+             $sql571->bindParam(':fecha', $fechaVenta);
              $sql571->bindParam(':nroFactura', $nroFactura);
           $sql571->execute();
 
              $sql1 = Conexion::conectar()->prepare("UPDATE saldos SET saldoActual= saldoActual + $total, saldoFinal= saldoFinal + $total  WHERE idCliente=:idCliente " );
               $sql1->bindParam(':idCliente', $idCliente);
-             
+
               $sql1->execute();
 
 
-                 $sql13 = Conexion::conectar()->prepare("SELECT MAX(idCuentaCorriente)AS id FROM cuentacorriente 
+                 $sql13 = Conexion::conectar()->prepare("SELECT MAX(idCuentaCorriente)AS id FROM cuentacorriente
                   WHERE idCliente = :idCliente");
                $sql13->bindParam(':idCliente', $idCliente);
                $sql13->execute();
                 $resu= $sql13->fetch();
                  $id =  $resu['id'];
-  
-               $sql11 = Conexion::conectar()->prepare("UPDATE cuentacorriente 
+
+               $sql11 = Conexion::conectar()->prepare("UPDATE cuentacorriente
                 SET saldo= (SELECT saldoActual FROM saldos WHERE idCliente=$idCliente)  WHERE idCliente=:idCliente AND idCuentaCorriente = :id " );
               $sql11->bindParam(':idCliente', $idCliente);
               $sql11->bindParam(':id', $id);
-            
+
               $sql11->execute();
 
           // borramos las tablas temporales para la siguiente venta.
@@ -315,10 +315,10 @@
 
             $borrar1 = Conexion::conectar()->prepare("DELETE FROM tempmedia");
             $borrar1->execute();
-        
 
           }
-  
+          return 'success';
+
     }
 
 
@@ -329,7 +329,7 @@
         $sql->bindParam(':idCuarteo', $idCuarteo);
 
         if ($sql->execute()) {
-           $sql1 = Conexion::conectar()->prepare("UPDATE  cuarteo SET 
+           $sql1 = Conexion::conectar()->prepare("UPDATE  cuarteo SET
                   estadoCuarteo= 1 WHERE idCuarteo=:idCuarteo");
                     $sql1->bindParam(':idCuarteo', $idCuarteo);
                     $sql1->execute();
@@ -346,7 +346,7 @@
         $sql->bindParam(':idTemp', $idTemp);
 
         if ($sql->execute()) {
-           $sql1 = Conexion::conectar()->prepare("UPDATE  cuarteoinventario SET 
+           $sql1 = Conexion::conectar()->prepare("UPDATE  cuarteoinventario SET
                   $descripcion= $peso , cantidad= cantidad+1 WHERE idCuarteo=:idCuarteo");
                     $sql1->bindParam(':idCuarteo', $id);
                     $sql1->execute();
@@ -362,7 +362,7 @@
         $sql->bindParam(':idInventario', $idInventario);
 
         if ($sql->execute()) {
-           $sql1 = Conexion::conectar()->prepare("UPDATE  inventario SET 
+           $sql1 = Conexion::conectar()->prepare("UPDATE  inventario SET
                 cantidad= 1 , estado= 'Disponible' WHERE idInventario=:idInventario");
                     $sql1->bindParam(':idInventario', $idInventario);
                     $sql1->execute();
@@ -431,7 +431,7 @@
               $sql->bindParam(':idCuarto', $idCuarto);
 
               if ($sql->execute()) {
-                $sql1 = Conexion::conectar()->prepare("UPDATE  cuarteoinventario SET 
+                $sql1 = Conexion::conectar()->prepare("UPDATE  cuarteoinventario SET
                   $descripcion= 0 , cantidad=cantidad-1 WHERE idCuarteo=:idCuarto");
                     $sql1->bindParam(':idCuarto', $idCuarto);
                     $sql1->execute();
@@ -454,7 +454,7 @@
               $sql->bindParam(':idInventario', $idInventario);
 
               if ($sql->execute()) {
-                $sql1 = Conexion::conectar()->prepare("UPDATE  inventario SET 
+                $sql1 = Conexion::conectar()->prepare("UPDATE  inventario SET
                   cantidad= 0 , estado= 'Vendida'  WHERE idInventario=:idInventario");
                     $sql1->bindParam(':idInventario', $idInventario);
                     $sql1->execute();
@@ -463,7 +463,7 @@
             }
 
             static public function getTotalTempModel($tabla){
-               
+
                 $sql = Conexion::conectar()->prepare("SELECT *, SUM(kilomedia * preciomedia) AS total FROM $tabla");
 
             if ($sql->execute()) {
@@ -475,7 +475,7 @@
             $sql->close();
             }
                        static public function getTotalTemp1Model($tabla){
-               
+
                 $sql = Conexion::conectar()->prepare("SELECT *, SUM(kilo * precio) AS total FROM $tabla");
 
             if ($sql->execute()) {
@@ -498,7 +498,7 @@
               $sql->bindParam(':idInventario', $idInventario);
 
               if ($sql->execute()) {
-                  $sql1 = Conexion::conectar()->prepare("UPDATE  inventario SET 
+                  $sql1 = Conexion::conectar()->prepare("UPDATE  inventario SET
                   cantidad= 0 , estado= 'Cuarteo' WHERE idInventario=:idInventario");
                     $sql1->bindParam(':idInventario', $idInventario);
                     $sql1->execute();
@@ -509,40 +509,40 @@
          }
 
            static public function addInventarioCuarteoModel(
-                                                       $pecho, 
-                                                       $mocho, 
+                                                       $pecho,
+                                                       $mocho,
                                                        $parrillero,
                                                        $completos,
                                                        $largos,
                                                        $bifes,
                                                        $asado,
                                                       $totalPeso,
-                                                       $idCuarteo, 
+                                                       $idCuarteo,
                                                        $tabla){
             $cantidad = 0;
             if ($pecho != 0) {
               $cantidad = $cantidad + 1;
-            } 
+            }
              if($mocho != 0){
-              $cantidad = $cantidad + 1;   
+              $cantidad = $cantidad + 1;
             }
              if($parrillero != 0){
-              $cantidad = $cantidad + 1;  
-            } 
+              $cantidad = $cantidad + 1;
+            }
              if($completos != 0){
-              $cantidad = $cantidad + 1;  
-            } 
+              $cantidad = $cantidad + 1;
+            }
              if($largos != 0){
-              $cantidad = $cantidad + 1;  
-            }  
+              $cantidad = $cantidad + 1;
+            }
              if($bifes != 0){
-              $cantidad = $cantidad + 1;  
-            }  
+              $cantidad = $cantidad + 1;
+            }
              if($asado != 0){
-              $cantidad = $cantidad + 1;  
-            }     
+              $cantidad = $cantidad + 1;
+            }
 
-                       
+
 
                $sql = Conexion::conectar()->prepare("INSERT INTO $tabla
                 (pecho,mocho, parrillero, completos,largos,bifes,asado,totalPeso,cantidad ,  idCuarteo)
@@ -560,7 +560,7 @@
               $sql->bindParam(':idCuarteo', $idCuarteo);
 
               if ($sql->execute()) {
-                  $sql1 = Conexion::conectar()->prepare("UPDATE  cuarteo SET 
+                  $sql1 = Conexion::conectar()->prepare("UPDATE  cuarteo SET
                   estadoCuarteo = 0 WHERE idCuarteo=$idCuarteo");
                     // $sql1->bindParam(':idCuarteo', $idCuarteo);
                     $sql1->execute();
@@ -572,7 +572,7 @@
 
           static public function editarInventarioModel($kiloMedia,$nroTropa, $idInventario, $tabla){
 
-               $sql = Conexion::conectar()->prepare("UPDATE  $tabla SET 
+               $sql = Conexion::conectar()->prepare("UPDATE  $tabla SET
                 kiloMedia = :kiloMedia , nroTropa= :nroTropa WHERE idInventario=:idInventario");
 
               $sql->bindParam(':kiloMedia', $kiloMedia);
@@ -589,7 +589,7 @@
        static public function comprobarInventarioModel($datosModel , $table){
 
 
-            $sql = Conexion::conectar()->prepare("SELECT * FROM $table 
+            $sql = Conexion::conectar()->prepare("SELECT * FROM $table
               WHERE nroTropa = :datosModel");
             $sql->execute(array(':datosModel'=>$datosModel));
             $res = $sql->fetch();
@@ -611,7 +611,7 @@
                                              $idProductos
                                               , $tabla){
 
-               $sql = Conexion::conectar()->prepare("UPDATE  $tabla SET 
+               $sql = Conexion::conectar()->prepare("UPDATE  $tabla SET
 dueHacienda = :dueHacienda,  cantCabeza = :cantCabeza,cantMedia =:cantMedia,fechaFaena=:fechaFaena,cantKilos =:cantKilos,nroTropa=:nroTropa WHERE idProductos=:idProductos ");
 
               $sql->bindParam(':dueHacienda', $dueHacienda);

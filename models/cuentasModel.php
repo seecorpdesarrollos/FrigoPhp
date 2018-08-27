@@ -1,4 +1,4 @@
-<?php 
+<?php
 
   require_once 'conexion.php';
 
@@ -6,9 +6,9 @@
 
   	     static public function getCuentasModel($table){
 
-   	   	    $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
+   	   	    $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta
               JOIN clientes cli ON cli.idCliente= ta.idCliente
-              JOIN vendedores ve ON ta.idVendedor= ve.idVendedor ORDER BY ta.idCliente ASC");
+              JOIN vendedores ve ON ta.idVendedor= ve.idVendedor WHERE ta.saldoActual >0 ORDER BY ta.idCliente ASC");
 
    	   	    if ($sql->execute()) {
    	   	    	return $sql->fetchAll();
@@ -18,11 +18,11 @@
             $sql->close();
    	   }
 
-              
+
          static public function getCuentasModelId($idCliente, $table){
-            $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
+            $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta
               JOIN clientes cli ON cli.idCliente= ta.idCliente
-              -- JOIN vendedores ve ON ta.idVendedor= ve.idVendedor 
+              -- JOIN vendedores ve ON ta.idVendedor= ve.idVendedor
               WHERE ta.idCliente = :idCliente ");
             if ($sql->execute( array(':idCliente'=>$idCliente))) {
                return $sql->fetch();
@@ -33,9 +33,9 @@
        }
          static public function getPagosModel($table){
 
-            $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
+            $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta
               JOIN clientes cli ON cli.idCliente= ta.idCliente
-              JOIN vendedores ve ON ta.idVendedor= ve.idVendedor 
+              JOIN vendedores ve ON ta.idVendedor= ve.idVendedor
               ORDER BY ta.fechaPago  DESC");
 
             if ($sql->execute()) {
@@ -49,7 +49,7 @@
 
          static public function getDetallesFacturaModel($idCliente, $fechaInicial, $fechaFinal, $table){
 
-            $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
+            $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta
              JOIN facturado det ON ta.nroFactura= det.nroFactura
               WHERE ta.idCliente = :idCliente AND ta.fecha  BETWEEN :fechaInicial AND :fechaFinal");
 
@@ -69,7 +69,7 @@
 
          static public function getTotalKilosModel($idCliente, $fechaInicial, $fechaFinal, $table){
 
-            $sql = Conexion::conectar()->prepare("SELECT SUM(kilo) AS totalKilos FROM $table ta 
+            $sql = Conexion::conectar()->prepare("SELECT SUM(kilo) AS totalKilos FROM $table ta
               WHERE ta.idCliente = :idCliente AND ta.fecha  BETWEEN :fechaInicial AND :fechaFinal");
 
             if ($sql->execute( array(
@@ -117,13 +117,13 @@
        }
          static public function getTodoModelId($idCliente, $fechaInicial, $fechaFinal,  $table){
 
-            $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta 
+            $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta
              -- LEFT JOIN detalles de ON de.nroFactura=ta.nroFactura
              LEFT JOIN clientes cli ON cli.idCliente= ta.idCliente
-             LEFT JOIN vendedores ve ON ta.idVendedor= ve.idVendedor 
-              WHERE ta.idCliente = :idCliente  AND ta.fecha 
+             LEFT JOIN vendedores ve ON ta.idVendedor= ve.idVendedor
+              WHERE ta.idCliente = :idCliente  AND ta.fecha
               BETWEEN :fechaInicial AND :fechaFinal ORDER BY ta.fecha ASC ");
-              
+
             if ($sql->execute( array(
               ':idCliente'=>$idCliente,
               ':fechaInicial'=>$fechaInicial,
@@ -148,7 +148,7 @@
               $propietario,
               $idVendedor , $tabla){
 
-        
+
 
             $sql = Conexion::conectar()->prepare("INSERT INTO $tabla(idCliente, comprobante, monto, efectivo, cheque, nroCheque, banco,propietario, idVendedor)
               VALUES(:idCliente,:comprobante, :monto , :efectivo,:cheque,:nroCheque, :banco, :propietario,:idVendedor)");
@@ -163,8 +163,8 @@
               $sql->bindParam(':idVendedor', $idVendedor);
               // $ven=1; // vendedor
               if ($sql->execute()) {
-   
-               $sql3 = Conexion::conectar()->prepare("UPDATE  saldos SET  saldoActual= saldoActual- $monto, saldoFinal= saldoFinal-  $monto , 
+
+               $sql3 = Conexion::conectar()->prepare("UPDATE  saldos SET  saldoActual= saldoActual- $monto, saldoFinal= saldoFinal-  $monto ,
                idVendedor=$idVendedor WHERE idCliente = :idCliente");
                $sql3->bindParam(':idCliente', $idCliente);
                 $sql3->execute();
@@ -184,22 +184,22 @@
               $sql41->execute();
 
 
-                 $sql13 = Conexion::conectar()->prepare("SELECT MAX(idCuentaCorriente)AS id FROM cuentacorriente 
+                 $sql13 = Conexion::conectar()->prepare("SELECT MAX(idCuentaCorriente)AS id FROM cuentacorriente
                   WHERE idCliente = :idCliente");
                $sql13->bindParam(':idCliente', $idCliente);
                $sql13->execute();
                 $resu= $sql13->fetch();
                  $id =  $resu['id'];
-             
 
-               $sql11 = Conexion::conectar()->prepare("UPDATE cuentacorriente 
-                 SET saldo= (SELECT saldoFinal FROM saldos WHERE idCliente=$idCliente)  
+
+               $sql11 = Conexion::conectar()->prepare("UPDATE cuentacorriente
+                 SET saldo= (SELECT saldoFinal FROM saldos WHERE idCliente=$idCliente)
                  WHERE idCliente=:idCliente AND idCuentaCorriente = :id" );
               $sql11->bindParam(':idCliente', $idCliente);
               $sql11->bindParam(':id', $id);
                $sql11->execute();
-               
-          
+
+
                 return 'success';
               }else{
               return 'errorers';
@@ -218,7 +218,7 @@
               $banco,
               $propietario, $tabla){
 
-        
+
             $sql = Conexion::conectar()->prepare("INSERT INTO $tabla(idCliente, comprobante, monto, efectivo, cheque, nroCheque, banco,propietario)
               VALUES(:idCliente,:comprobante, :monto , :efectivo,:cheque,:nroCheque, :banco, :propietario)");
               $sql->bindParam(':idCliente', $idCliente);
@@ -235,7 +235,7 @@
                $sql571 = Conexion::conectar()->prepare("INSERT INTO cuentacorriente(comprobante,pagos,idCliente, fecha)
                     VALUES(:nroFactura,:pagos,:idCliente,:fecha)");
                $hoy = date('y-m-d');
-             
+
                    $sql571->bindParam(':nroFactura', $comprobante);
                    $sql571->bindParam(':pagos', $monto);
                    $sql571->bindParam(':idCliente', $idCliente);
@@ -247,32 +247,32 @@
                $sql3->bindParam(':idCliente', $idCliente);
                 $sql3->execute();
 
-                
-                 $sql13 = Conexion::conectar()->prepare("SELECT MAX(idCuentaCorriente)AS id FROM cuentacorriente 
+
+                 $sql13 = Conexion::conectar()->prepare("SELECT MAX(idCuentaCorriente)AS id FROM cuentacorriente
                   WHERE idCliente = :idCliente");
                $sql13->bindParam(':idCliente', $idCliente);
                $sql13->execute();
                 $resu= $sql13->fetch();
                  $id =  $resu['id'];
-  
-               $sql11 = Conexion::conectar()->prepare("UPDATE cuentacorriente 
+
+               $sql11 = Conexion::conectar()->prepare("UPDATE cuentacorriente
                 SET saldo= (SELECT saldoActual FROM saldos WHERE idCliente=$idCliente)  WHERE idCliente=:idCliente AND idCuentaCorriente = :id " );
               $sql11->bindParam(':idCliente', $idCliente);
               $sql11->bindParam(':id', $id);
-            
+
               $sql11->execute();
-              
-              
+
+
                 return 'success';
               }else{
               return 'errorers';
             }
                $sql->close();
     }
-       
+
        // panel principal
-       // 
-           
+       //
+
        static public function getInventarioTropaModel($table){
 
             $sql = Conexion::conectar()->prepare("SELECT nroTropa , estado,  COUNT(*) as total from inventario WHERE  estado = 'cuarteo'  GROUP BY nroTropa");
