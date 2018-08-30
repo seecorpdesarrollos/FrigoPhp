@@ -242,6 +242,29 @@
         // ////////////////
         // ////////////////
 
+
+        static public function getExistenciaController(){
+
+            $data = file_get_contents("php://input");
+                $request = json_decode($data);
+                $request = (array) $request;
+
+
+                 $nroTropa =$request['nroTropa'];
+                  // $nroTropa =44586;
+
+               $respuesta = CuentasModel::getExistenciaModel($nroTropa, 'inventario');
+
+                if ($respuesta) {
+
+                   echo json_encode($respuesta);
+
+                }
+
+           }
+
+
+
      static public function getInventarioTropaController(){
 
           $respuesta = CuentasModel::getInventarioTropaModel('inventario');
@@ -360,7 +383,7 @@
       }
    }
 
-  
+
 
 
    // panel principal
@@ -395,3 +418,10 @@
         $delete->getCantController();
       }
    }
+
+   if(isset($_GET['id'])){
+   if ($_GET['id'] == "getExistencia") {
+     $delete = new CuentasController;
+     $delete->getExistenciaController();
+   }
+}

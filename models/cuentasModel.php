@@ -217,6 +217,19 @@
        // panel principal
        //
 
+       static public function getExistenciaModel($nroTropa , $table){
+
+            $sql = Conexion::conectar()->prepare("SELECT * , count(inv.cantidad) as total  , sum(inv.kiloMedia) AS totalKilos FROM inventario inv JOIN productos pro ON inv.nroTropa= pro.nroTropa
+  WHERE inv.nroTropa= :nroTropa AND inv.cantidad = 1 ");
+
+            if ($sql->execute(array(':nroTropa'=>$nroTropa))) {
+              return $sql->fetchAll();
+            }else{
+              return 'error';
+            }
+            $sql->close();
+       }
+
        static public function getInventarioTropaModel($table){
 
             $sql = Conexion::conectar()->prepare("SELECT nroTropa , estado,  COUNT(*) as total from inventario WHERE  estado = 'cuarteo'  GROUP BY nroTropa");
