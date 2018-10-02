@@ -13,7 +13,7 @@ date_default_timezone_set('America/Argentina/Buenos_Aires');
        //      echo "Error de Conexion" . $e->getMessage();
        //      echo "Error de Conexion" . $e->getLine();
        //  }
-       $conexion= new PDO('mysql:host=localhost;dbname=firgorifico', 'root', '');
+       $conexion= new PDO('mysql:host=localhost;dbname=frigorifico', 'root', '');
        $conexion->exec('SET CHARACTER SET UTF8');
         return $conexion;
 

@@ -137,6 +137,24 @@
             $sql->close();
        }
 
+       static public function getSaldoAnteriorModelId($idCliente, $fechaInicial,   $table){
+
+          $sql = Conexion::conectar()->prepare("SELECT * FROM $table ta
+            WHERE ta.idCliente = :idCliente  AND ta.fecha < :fechaInicial");
+
+          if ($sql->execute( array(
+            ':idCliente'=>$idCliente,
+            ':fechaInicial'=>$fechaInicial,
+
+            ))) {
+             return $sql->fetchAll();
+
+          }else{
+            return 'errors';
+          }
+          $sql->close();
+     }
+
 
        static public function addCuentasModel($idCliente,
               $comprobante,

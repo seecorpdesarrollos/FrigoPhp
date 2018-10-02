@@ -193,6 +193,35 @@
 
         }
 
+        static public function getSaldoAnteriorController(){
+
+    $data = file_get_contents("php://input");
+        $request = json_decode($data);
+        $request = (array) $request;
+
+
+         $idCliente =$request['idCliente'];
+         $fechaInicial =$request['fechaInicial'];
+         // $fechaInicial ='2018-07-20';
+         //
+         //  $idCliente =18;
+         if (empty($fechaInicial)) {
+
+           echo json_encode(0);
+         }else{
+
+       $respuesta = CuentasModel::getSaldoAnteriorModelId($idCliente, $fechaInicial,
+         'cuentacorriente');
+           echo json_encode($respuesta);
+
+
+         }
+
+
+
+   }
+
+
 
 
   	 static public function addCuentasController(){
@@ -360,6 +389,13 @@
         $delete->getTodoController();
       }
    }
+
+   if(isset($_GET['id'])){
+     if ($_GET['id'] == "saldoAnterior") {
+       $delete = new CuentasController;
+       $delete->getSaldoAnteriorController();
+     }
+  }
 
 
    if(isset($_GET['id'])){
